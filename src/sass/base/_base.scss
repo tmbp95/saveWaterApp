@@ -1,18 +1,38 @@
+$bp-largest: 75em; // 1200px
+$bp-large: 68.75em; // 1100px
+$bp-medium: 56.25em; // 900px
+$bp-small: 37.5em; // 600px
+$bp-smallest: 31.25em; // 500px
+$bp-min: 28.125em; // 450px
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
 *,
 *::after,
 *::before {
-    margin: 0;
-    padding: 0;
     box-sizing: inherit;
 }
 
 html {
-    // overall setting for 1rem
-    font-size: 62.5%; // 1rem = 10px; 10px/16px = 62.5%
+    box-sizing: border-box;
+    font-size: 62.5%; // 1rem = 10px, 10px/16px = 62.5%
+
+    @media only screen and (max-width: $bp-large) {
+        font-size: 50%;
+    }
 }
 
 body {
-    box-sizing: border-box;
-    padding: 3rem;
-    background-color: rgb(245, 245, 245);
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    color: $color-grey-dark-2;
+    background-image: linear-gradient(to right bottom, $color-primary-dark, $color-primary-light);
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    min-height: 100vh;
 }
