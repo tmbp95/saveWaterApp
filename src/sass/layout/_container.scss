@@ -1,15 +1,35 @@
 .container {
+    width: 120rem;
     max-width: 120rem;
-    margin: 8rem auto;
-    background-color: $color-grey-light-1;
+    background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+    background-size: cover;
+    background-repeat: no-repeat;
     box-shadow: $shadow-dark;
     border-radius: 3px;
+    overflow: hidden;
 
-    min-height: 50rem;
+    min-height: 52rem;
 
     @media only screen and (max-width: $bp-largest) {
         margin: 0;
         max-width: 100%;
         width: 100%;
+    }
+}
+
+.content {
+    display: flex;
+
+    &__left {
+        flex: 0 0 10%;
+        height: 100%;
+        padding: 3rem;
+    }
+
+    &__right {
+        flex: 1;
+
+        display: flex;
+        justify-content: center;
     }
 }

@@ -1,0 +1,44 @@
+.data-box {
+    width: 70%;
+
+    &__table {
+        opacity: 1;
+        display: block;
+        min-height: 20rem;
+
+        table {
+            border-collapse: collapse;
+            border-radius: 0.8rem;
+            overflow: hidden;
+            width: 100%;
+            font-size: 1.3rem;
+            box-shadow: $shadow-light;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 0.5rem 1rem;
+            color: $color-grey-dark-1;
+        }
+
+        tr {
+            background-color: $color-grey-light-1;
+        }
+
+        tr:nth-child(even) {
+            background-color: $color-white;
+        }
+
+        th {
+            background-color: $color-primary;
+            color: white;
+        }
+    }
+
+    &__chart {
+        opacity: 1;
+        display: none;
+        min-height: 20rem;
+    }
+}

@@ -1,0 +1,268 @@
+.water-animation {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    &__type {
+        color: $color-primary;
+        text-shadow: 0.5rem 1rem 2rem $color-shadow-medium;
+    }
+
+    &--small {
+        flex: 1;
+        background: $color-gradient-3;
+    }
+
+    &--big {
+        position: relative;
+    }
+}
+
+.tapWater {
+    align-self: center;
+
+    margin-top: -10rem;
+    width: 2rem;
+    height: 3.5rem;
+    z-index: 200;
+}
+
+.info {
+    align-self: center;
+
+    position: relative;
+    background-color: rgba($color-white, 0.7);
+    box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    transform: scale(1.5);
+    margin-top: -3rem;
+    z-index: 2;
+
+    display: flex;
+
+    &--small {
+        width: 10rem;
+        height: 7rem;
+        border: 2px solid white;
+        border-radius: 2rem;
+    }
+
+    &--big {
+        width: 15rem;
+        height: 25rem;
+        border: 1px solid $color-grey-dark-2;
+        border-radius: 1rem;
+        box-sizing: content-box;
+        margin-bottom: 5rem;
+    }
+
+    &__text {
+        width: 100%;
+        text-align: center;
+        position: absolute;
+        z-index: 100;
+
+        &--small {
+            align-self: center;
+            font-size: $default-font-size / 1.5;
+            color: $color-grey-dark-3;
+        }
+
+        &--big {
+            font-size: $default-font-size * 3;
+            color: rgba($color-grey-dark-3, 0.8);
+            text-shadow: 0.2rem 0.2rem 1.5rem $color-shadow-very-high-2;
+            -webkit-text-fill-color: rgba($color-grey-dark-3, 0.8); /* Will override color (regardless of order) */
+            -webkit-text-stroke-width: 0.3px;
+            -webkit-text-stroke-color: rgba($color-grey-dark-3, 0.8);
+            bottom: 42%;
+            z-index: 100;
+
+            span {
+                color: rgba($color-grey-dark-3, 0.8);
+                font-size: $default-font-size * 1.2;
+                -webkit-text-fill-color: rgba($color-grey-dark-3, 0.8); /* Will override color (regardless of order) */
+                -webkit-text-stroke-width: 0.3px;
+                -webkit-text-stroke-color: rgba($color-black, 0.5);
+            }
+        }
+    }
+}
+.line {
+    align-self: center;
+
+    width: 22.5rem;
+    height: 37.5rem;
+    position: absolute;
+    top: -9rem;
+
+    &__info {
+        width: 24rem;
+        height: 1px;
+        background-color: rgba($color-grey-dark-3, 1);
+        position: absolute;
+        left: -6%;
+        z-index: 1;
+
+        span {
+            position: absolute;
+            left: -1rem;
+            z-index: 1000;
+            color: $color-white;
+            bottom: 0;
+            font-size: $default-font-size * 0.9;
+        }
+
+        &--1 {
+            bottom: 25%;
+        }
+        &--2 {
+            bottom: 50%;
+        }
+        &--3 {
+            bottom: 75%;
+        }
+    }
+}
+
+.wave {
+    width: 15rem;
+    height: 15rem;
+    position: absolute;
+    // background: lightblue;
+    left: -30%;
+    bottom: -180%;
+    border-radius: 22%;
+    transition: all 1.4s linear;
+    animation: waves 3.4s linear reverse infinite;
+
+    &__1 {
+        width: 25rem;
+        height: 25rem;
+        left: -20%;
+        bottom: -50%;
+        transition: all 1.8s linear;
+        animation: waves 2.4s linear infinite;
+        z-index: 200;
+    }
+    &__2 {
+        width: 25rem;
+        height: 25rem;
+        left: -30%;
+        bottom: -50%;
+        transition: all 1.4s linear;
+        animation: waves 3.4s linear infinite;
+        z-index: 200;
+    }
+    &__3 {
+        width: 25rem;
+        height: 25rem;
+        left: -40%;
+        bottom: -50%;
+        transition: all 1.2s linear;
+        animation: waves 4.4s linear infinite;
+        z-index: 200;
+    }
+    &__4 {
+        width: 25rem;
+        height: 25rem;
+        left: -10%;
+        bottom: -50%;
+        transition: all 1.2s linear;
+        animation: waves 4.4s linear infinite;
+        z-index: 200;
+    }
+    &__5 {
+        width: 25rem;
+        height: 25rem;
+        left: -15%;
+        bottom: -50%;
+        transition: all 2.2s linear;
+        animation: waves 3.4s linear reverse infinite;
+        z-index: 200;
+    }
+}
+
+.transparentblue {
+    background: linear-gradient(to right, rgba($color-tertiary-light, 0.4), rgba($color-primary-medium, 0.3));
+}
+
+.transparentwhite {
+    background: linear-gradient(to left, rgba($color-white, 0.4), rgba($color-tertiary-light, 0.4));
+}
+
+.lightblue {
+    background: linear-gradient(to right, $color-primary-medium, $color-tertiary-light);
+}
+
+.drops {
+    align-self: center;
+    width: 12px;
+    height: 12px;
+
+    position: absolute;
+    top: 47%;
+    border-radius: 1em;
+    border-top-right-radius: 0.2em;
+    opacity: 0;
+    animation: drops 2.5s ease-in-out infinite;
+    box-shadow: $shadow-dark;
+    z-index: 100;
+}
+.drop2 {
+    animation-delay: 0.8s;
+}
+.drop3 {
+    animation-delay: 1.7s;
+}
+
+@keyframes drops {
+    0% {
+        width: 6px;
+        height: 6px;
+        opacity: 0.2;
+        transform: translateY(0) rotate(-40deg);
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    100% {
+        width: 12px;
+        height: 12px;
+        transform: translateY(22rem) rotate(-40deg);
+    }
+}
+
+@keyframes waves {
+    0% {
+        transform: rotate(0);
+        border-radius: 30%;
+    }
+
+    45% {
+        border-radius: 39%;
+    }
+
+    100% {
+        transform: rotate(360deg);
+        border-radius: 30%;
+    }
+}
+
+@keyframes waves-effect2 {
+    0% {
+        transform: rotate(0);
+        border-radius: 30%;
+    }
+
+    45% {
+        border-radius: 39%;
+    }
+
+    100% {
+        transform: rotate(360deg);
+        border-radius: 30%;
+    }
+}

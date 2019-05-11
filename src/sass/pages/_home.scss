@@ -1,0 +1,36 @@
+.section-info {
+    padding: 2rem 0 5rem 2rem;
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+}
+
+// .section-timer {
+//     padding: 5rem;
+//     border-top: 1px solid $color-grey-light-3;
+
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+// }
+
+.section-about {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.section-timer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.section-manage {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+}

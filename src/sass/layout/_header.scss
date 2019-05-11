@@ -1,0 +1,28 @@
+.header {
+    &__title {
+        margin: 0 auto;
+        padding: 2rem 2rem 6rem 2rem;
+        line-height: 0.9;
+        font-weight: 700;
+        color: $color-grey-dark-1;
+        font-size: $default-font-size * 1.5;
+        text-align: right;
+        text-transform: uppercase;
+
+        &--left {
+            color: inherit;
+            letter-spacing: 0.3rem;
+        }
+
+        &--right {
+            color: $color-tertiary-light;
+            letter-spacing: 0.3rem;
+        }
+
+        &--bottom {
+            color: inherit;
+            font-weight: 400;
+            font-size: $default-font-size * 1.3;
+        }
+    }
+}

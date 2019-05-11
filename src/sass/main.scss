@@ -7,12 +7,20 @@
 @import 'base/typography';
 @import 'base/utilities';
 
-@import 'component/popup';
-@import 'component/button';
+@import 'components/info';
+@import 'components/timer';
+@import 'components/input';
+@import 'components/button';
+@import 'components/waterAnimation';
+@import 'components/slider';
+@import 'components/data-box';
 
 @import 'layout/footer';
 @import 'layout/header';
 @import 'layout/container';
-@import 'layout/navigation';
+@import 'layout/about';
+@import 'layout/charts';
+@import 'layout/topbar';
+@import 'layout/sidebar';
 
 @import 'pages/home';

@@ -1,0 +1,25 @@
+.btn {
+    background-color: $color-grey-light-1;
+    border: 1px solid $color-tertiary-light;
+    color: $color-tertiary-light;
+
+    font-weight: 900;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $color-tertiary-light;
+        color: $color-white;
+    }
+
+    &__add {
+        width: 4rem;
+        height: 2rem;
+        border-radius: 8px 8px 0 0;
+    }
+
+    &__remove {
+        width: 4rem;
+        height: 2rem;
+        border-radius: 0 0 8px 8px;
+    }
+}
