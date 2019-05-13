@@ -4,11 +4,278 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <link rel="icon" href="img/water.png" />
+        <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
         <link rel="stylesheet" href="css/style.css" />
         <title>Save Water App</title>
     </head>
 
     <body>
-        <script src="js/bundle.js"></script>
+        <div class="container">
+            <div class="content">
+                <div class="content__left">
+                    <header class="header">
+                        <div class="loader">
+                            <h1 class="header__title" style="background-image: url(../../img/waterwave.png)"><span class="header__title--left">Save</span><span class="header__title--right">Water</span> <span class="header__title--bottom">App</span></h1>
+                        </div>
+                        <nav class="topbar">
+                            <ul class="topbar__nav">
+                                <li class="topbar__item topbar__item--active">
+                                    <a href="#about" class="topbar__link">About</a>
+                                </li>
+                                <li>&nbsp;</li>
+                                <li>&nbsp;</li>
+                                <li class="topbar__item ">
+                                    <a href="#timer" class="topbar__link">Add Consume</a>
+                                </li>
+                                <li class="topbar__item ">
+                                    <a href="#manage" class="topbar__link">Manage</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </header>
+                </div>
+                <div class="content__right">
+                    <section class="section-about">
+                        <div class="about">
+                            <h2 class="heading-secondary">Don't waste, Water is Life!</h2>
+                            <p class="about__description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda nihil quod deserunt, illum dignissimos praesentium non voluptates corrupti delectus rerum nulla consequuntur quasi repudiandae cum odio voluptatibus cumque libero pariatur.</p>
+                            <p class="about__owner">Tiago Pereira</p>
+                        </div>
+                        <img src="img/example.png" alt="" class="about__img" />
+                    </section>
+
+                    <section class="section-timer">
+                        <nav class="sidebar">
+                            <ul class="sidebar__nav">
+                                <li class="sidebar__item sidebar__item--active">
+                                    <a href="#" class="sidebar__link">
+                                        <img src="img/bathtub-2.png" alt="" class="sidebar__icon sidebar__icon-1" />
+                                    </a>
+                                </li>
+                                <li class="sidebar__item ">
+                                    <a href="#" class="sidebar__link">
+                                        <img src="img/sink-2.png" alt="" class="sidebar__icon sidebar__icon-2" />
+                                    </a>
+                                </li>
+                                <li class="sidebar__item ">
+                                    <a href="#" class="sidebar__link">
+                                        <img src="img/toilet-2.png" alt="" class="sidebar__icon sidebar__icon-3" />
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <div class="water-animation water-animation--small">
+                            <h2 class="heading-quad"><span class="water-animation__type">Shower</span><br />Liters per minute</h2>
+                            <img src="img/waterTap.png" alt="" class="tapWater" />
+
+                            <div class="drops lightblue"></div>
+                            <div class="drops lightblue drop2"></div>
+                            <div class="drops lightblue drop3"></div>
+                            <div class="info info--small">
+                                <p class="info__text info__text--small">12 L/min</p>
+                                <div class="wave lightblue"></div>
+                            </div>
+
+                            <script>
+                                const wave = document.querySelector('.wave');
+                                let bottom = -150;
+
+                                window.addEventListener('load', function() {
+                                    move();
+                                });
+
+                                function move() {
+                                    const id = setInterval(frame, 2000);
+
+                                    function frame() {
+                                        if (bottom >= -160) {
+                                            wave.style.bottom = bottom + '%';
+                                            bottom = bottom - 25;
+                                        } else {
+                                            wave.style.bottom = bottom + '%';
+                                            bottom = bottom + 25;
+                                        }
+                                    }
+                                }
+                            </script>
+                        </div>
+                        <div class="timer">
+                            <div class="timer__arrow"><span>&#10148;</span></div>
+                            <h2 class="heading-tertiary">Add your water consumption time:</h2>
+                            <div class="timer__auto">
+                                <span class="timer__text">00:00:00</span>
+                            </div>
+                            <p class="paragraph">- or -</p>
+                            <div class="timer__counter">
+                                <div class="timer__boxes">
+                                    <button class="btn btn__add">+</button>
+                                    <input type="number" class="input input__hours" value="00" min="0" max="24" />
+                                    <button class="btn btn__remove">-</button>
+                                </div>
+                                <div class="timer__boxes">
+                                    <button class="btn btn__add">+</button>
+                                    <input type="number" class="input input__minutes" value="00" min="0" max="60" />
+                                    <button class="btn btn__remove">-</button>
+                                </div>
+                                <div class="timer__boxes">
+                                    <button class="btn btn__add">+</button>
+                                    <input type="number" class="input input__seconds" value="00" min="0" max="60" />
+                                    <button class="btn btn__remove">-</button>
+                                </div>
+                            </div>
+                            <button class="btn timer__save">Save</button>
+                        </div>
+                    </section>
+
+                    <section class="section-manage">
+                        <div class="charts charts__left">
+                            <div class="slider-type">
+                                <div class="slider-type__legend">
+                                    <span>Table</span>
+                                    <span>Chart</span>
+                                </div>
+                                <label class="slider-type__switch" for="checkbox-toggle">
+                                    <input type="checkbox" id="checkbox-toggle" />
+                                    <div class="slider-type__slider round"></div>
+                                </label>
+                            </div>
+                            <div class="data-box">
+                                <div class="data-box__table">
+                                    <table>
+                                        <tr>
+                                            <th>Type</th>
+                                            <th>Time</th>
+                                            <th>Liters</th>
+                                            <th>Options</th>
+                                        </tr>
+                                        <tr>
+                                            <td>Shower</td>
+                                            <td>15</td>
+                                            <td>120</td>
+                                            <td>Edit | Delete</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Hands Wash</td>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td>Edit | Delete</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Shower</td>
+                                            <td>10</td>
+                                            <td>100</td>
+                                            <td>Edit | Delete</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>...</td>
+                                            <td>...</td>
+                                            <td>...</td>
+                                            <td>...</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="data-box__chart">
+                                    <canvas id="myChart"></canvas>
+                                    <script>
+                                        var ctx = document.getElementById('myChart').getContext('2d');
+                                        const data = [15, 13, 13, 15, 12, 13, 15];
+                                        var myChart = new Chart(ctx, {
+                                            type: 'line',
+                                            data: {
+                                                labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                                                datasets: [
+                                                    {
+                                                        data: data,
+                                                        backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                                                        borderColor: 'rgba(0,0,0,0.6)',
+                                                        borderWidth: 1
+                                                    }
+                                                ]
+                                            },
+                                            options: {
+                                                responsive: true,
+                                                maintainAspectRatio: false,
+                                                scales: {
+                                                    xAxes: [
+                                                        {
+                                                            display: true,
+                                                            scaleLabel: {
+                                                                display: true,
+                                                                labelString: 'Month'
+                                                            },
+                                                            gridLines: {
+                                                                color: 'rgba(0, 0, 0, 0.1)'
+                                                            },
+                                                            ticks: {
+                                                                callback: function(value) {
+                                                                    if (value.length > 4) {
+                                                                        return value.substr(0, 3); //truncate
+                                                                    } else {
+                                                                        return value;
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    ],
+                                                    yAxes: [
+                                                        {
+                                                            ticks: {
+                                                                beginAtZero: true,
+                                                                steps: 10,
+                                                                stepValue: 5,
+                                                                max: Math.max(...data) + 10
+                                                            },
+                                                            scaleLabel: {
+                                                                display: true,
+                                                                labelString: 'Liters'
+                                                            },
+                                                            gridLines: {
+                                                                color: 'rgba(0, 0, 0, 0.1)'
+                                                            }
+                                                        }
+                                                    ]
+                                                },
+                                                legend: {
+                                                    display: false
+                                                }
+                                            }
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="charts charts__right">
+                            <h2 class="heading-tertiary">Today's Consume:</h2>
+                            <div class="water-animation water-animation--big">
+                                <div class="info info--big">
+                                    <p class="info__text info__text--big">50<span>%</span></p>
+                                    <div class="wave transparentwhite wave__1"></div>
+                                    <div class="wave transparentblue wave__2"></div>
+                                    <div class="wave transparentwhite wave__3"></div>
+                                    <div class="wave transparentwhite wave__4"></div>
+                                    <div class="wave transparentblue wave__5"></div>
+                                </div>
+                                <div class="line">
+                                    <div class="line__info line__info--1">
+                                        <span>25</span>
+                                    </div>
+                                    <div class="line__info line__info--2">
+                                        <span>50</span>
+                                    </div>
+                                    <div class="line__info line__info--3">
+                                        <span>75</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <!-- <script src="js/bundle.js"></script> -->
     <script type="text/javascript" src="js/bundle.js"></script></body>
 </html>

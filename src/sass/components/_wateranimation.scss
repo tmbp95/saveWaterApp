@@ -75,8 +75,10 @@
             -webkit-text-fill-color: rgba($color-grey-dark-3, 0.8); /* Will override color (regardless of order) */
             -webkit-text-stroke-width: 0.3px;
             -webkit-text-stroke-color: rgba($color-grey-dark-3, 0.8);
-            bottom: 42%;
+            // bottom: 42%;
+            bottom: 0%;
             z-index: 100;
+            transition: bottom 0.7s linear;
 
             span {
                 color: rgba($color-grey-dark-3, 0.8);
@@ -140,8 +142,9 @@
         width: 25rem;
         height: 25rem;
         left: -20%;
-        bottom: -50%;
-        transition: all 1.8s linear;
+        bottom: -100%;
+        // bottom: -50%;
+        transition: $transitionWave;
         animation: waves 2.4s linear infinite;
         z-index: 200;
     }
@@ -149,8 +152,9 @@
         width: 25rem;
         height: 25rem;
         left: -30%;
-        bottom: -50%;
-        transition: all 1.4s linear;
+        bottom: -100%;
+        // bottom: -50%;
+        transition: $transitionWave;
         animation: waves 3.4s linear infinite;
         z-index: 200;
     }
@@ -158,8 +162,9 @@
         width: 25rem;
         height: 25rem;
         left: -40%;
-        bottom: -50%;
-        transition: all 1.2s linear;
+        bottom: -100%;
+        // bottom: -50%;
+        transition: $transitionWave;
         animation: waves 4.4s linear infinite;
         z-index: 200;
     }
@@ -167,8 +172,9 @@
         width: 25rem;
         height: 25rem;
         left: -10%;
-        bottom: -50%;
-        transition: all 1.2s linear;
+        bottom: -100%;
+        // bottom: -50%;
+        transition: $transitionWave;
         animation: waves 4.4s linear infinite;
         z-index: 200;
     }
@@ -176,8 +182,9 @@
         width: 25rem;
         height: 25rem;
         left: -15%;
-        bottom: -50%;
-        transition: all 2.2s linear;
+        bottom: -100%;
+        // bottom: -50%;
+        transition: $transitionWave;
         animation: waves 3.4s linear reverse infinite;
         z-index: 200;
     }

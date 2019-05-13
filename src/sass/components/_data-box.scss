@@ -4,7 +4,7 @@
     &__table {
         opacity: 1;
         display: block;
-        min-height: 20rem;
+        min-height: 30rem;
 
         table {
             border-collapse: collapse;
@@ -39,6 +39,11 @@
     &__chart {
         opacity: 1;
         display: none;
-        min-height: 20rem;
+        min-height: 30rem;
+
+        canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
     }
 }
