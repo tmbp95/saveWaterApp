@@ -8,6 +8,7 @@ export default class Consume {
         this.date = date; // NOW date
     }
 
+    // Calc the consumes according to the type and time of the consume
     calcConsume() {
         // Assuming that we consume x Liters per minute of running water
         switch (this.type) {
@@ -17,6 +18,9 @@ export default class Consume {
             case 'handsWash':
                 this.liters = this.time * 5;
                 break;
+            // case 'handsWash':
+            //     this.liters = this.time * 5;
+            //     break;
             default:
                 this.liters = 0;
         }

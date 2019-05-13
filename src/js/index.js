@@ -1,9 +1,7 @@
 // Global app controller
 import Consume from './models/Consume';
-import ListWeek from './models/ListWeek';
 
 import * as consumeView from './views/consumeView';
-import * as chartView from './views/chartView';
 
 import { elements, renderLoader, clearLoader } from './views/base';
 import '../sass/main.scss';
@@ -30,10 +28,10 @@ const state = {};
 //     Sunday: 0
 // };
 
-const consume1 = new Consume('shower', 10, new Date('05/13/2019'));
-const consume2 = new Consume('shower', 15, new Date('05/14/2019'));
-const consume3 = new Consume('shower', 15, new Date('05/15/2019'));
-const consume4 = new Consume('shower', 15, new Date('05/16/2019'));
+const consume1 = new Consume('shower', 10, new Date('05/14/2019'));
+const consume2 = new Consume('shower', 15, new Date('05/15/2019'));
+const consume3 = new Consume('shower', 15, new Date('05/16/2019'));
+const consume4 = new Consume('shower', 15, new Date('05/17/2019'));
 
 consume1.calcConsume();
 consume2.calcConsume();
@@ -139,7 +137,7 @@ const controlChart = () => {
     const [_, arrWeek] = createWeekStruct();
 
     // Render the Chart with the array of liter per week day
-    chartView.renderChart(arrWeek);
+    consumeView.renderChart(arrWeek);
 };
 
 /**
@@ -179,28 +177,8 @@ const controlWaterPercentage = () => {
     // Calculate the percentage from today's usage compared to week's average consume.
     const percentage = (todaysConsume / averageDay) * 100;
 
-    // Update the (percentage) text's position using the Bottom property
-    const textPercentage = [...elements.waterAnimationBig.childNodes][1];
-    const bottomPosition = (percentage.toFixed(0) * 45) / 50;
-    textPercentage.style.bottom = `${bottomPosition}%`;
-
-    //////////////////////////////////////////////////////////////////////////////
-    // TODO: IF THE BOTTOMPOSITION IS TO BIG, IT WILL GET HIDDEN BY THE OVERFLOW
-    //////////////////////////////////////////////////////////////////////////////
-
-    // Update the percentage text to the respective value
-    const percentageDOM = [...elements.waterAnimationBig.childNodes][1].firstChild;
-    percentageDOM.textContent = percentage.toFixed(0);
-
-    // Update the waves DOMs positions usign the Bottom property
-    const wavesDOM = [...elements.waterAnimationBig.childNodes].filter(elm => (elm.classList ? elm.classList.contains('wave') : null));
-    const modifiedPercentage = 100 - percentage.toFixed(0);
-
-    wavesDOM.forEach(wave => (wave.style.bottom = `-${modifiedPercentage.toFixed(0)}%`));
-
-    //////////////////////////////////////////////////////////////////////////////
-    // TODO: IF THE BOTTOMPOSITION IS TO BIG, IT WILL GET HIDDEN BY THE OVERFLOW
-    //////////////////////////////////////////////////////////////////////////////
+    // Render the WaterAnimation with the calculated percentage
+    consumeView.renderWaterAnimation(percentage);
 };
 
 // Create Week Strucute, can be an Object or an Array
