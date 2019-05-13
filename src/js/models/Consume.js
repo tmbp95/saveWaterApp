@@ -21,9 +21,4 @@ export default class Consume {
                 this.liters = 0;
         }
     }
-
-    findWeekDay() {
-        const dayOfWeek = this.date.getDay();
-        this.weekDay = isNaN(dayOfWeek) ? null : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dayOfWeek];
-    }
 }

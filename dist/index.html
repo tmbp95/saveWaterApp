@@ -144,106 +144,29 @@
                             <div class="data-box">
                                 <div class="data-box__table">
                                     <table>
-                                        <tr>
-                                            <th>Type</th>
-                                            <th>Time</th>
-                                            <th>Liters</th>
-                                            <th>Options</th>
-                                        </tr>
-                                        <tr>
-                                            <td>Shower</td>
-                                            <td>15</td>
-                                            <td>120</td>
-                                            <td>Edit | Delete</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Hands Wash</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>Edit | Delete</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Shower</td>
-                                            <td>10</td>
-                                            <td>100</td>
-                                            <td>Edit | Delete</td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>...</td>
-                                            <td>...</td>
-                                            <td>...</td>
-                                            <td>...</td>
-                                        </tr>
+                                        <thead>
+                                            <tr>
+                                                <th>Type</th>
+                                                <th>Time</th>
+                                                <th>Liters</th>
+                                                <th>Options</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="consume-table">
+                                            <!-- 
+                                            <tr>
+                                                <td>Shower</td>
+                                                <td>15</td>
+                                                <td>120</td>
+                                                <td>Edit | Delete</td>
+                                            </tr>
+                                            -->
+                                        </tbody>
                                     </table>
                                 </div>
                                 <div class="data-box__chart">
                                     <canvas id="myChart"></canvas>
-                                    <script>
-                                        var ctx = document.getElementById('myChart').getContext('2d');
-                                        const data = [15, 13, 13, 15, 12, 13, 15];
-                                        var myChart = new Chart(ctx, {
-                                            type: 'line',
-                                            data: {
-                                                labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-                                                datasets: [
-                                                    {
-                                                        data: data,
-                                                        backgroundColor: 'rgba(54, 162, 235, 0.8)',
-                                                        borderColor: 'rgba(0,0,0,0.6)',
-                                                        borderWidth: 1
-                                                    }
-                                                ]
-                                            },
-                                            options: {
-                                                responsive: true,
-                                                maintainAspectRatio: false,
-                                                scales: {
-                                                    xAxes: [
-                                                        {
-                                                            display: true,
-                                                            scaleLabel: {
-                                                                display: true,
-                                                                labelString: 'Month'
-                                                            },
-                                                            gridLines: {
-                                                                color: 'rgba(0, 0, 0, 0.1)'
-                                                            },
-                                                            ticks: {
-                                                                callback: function(value) {
-                                                                    if (value.length > 4) {
-                                                                        return value.substr(0, 3); //truncate
-                                                                    } else {
-                                                                        return value;
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    ],
-                                                    yAxes: [
-                                                        {
-                                                            ticks: {
-                                                                beginAtZero: true,
-                                                                steps: 10,
-                                                                stepValue: 5,
-                                                                max: Math.max(...data) + 10
-                                                            },
-                                                            scaleLabel: {
-                                                                display: true,
-                                                                labelString: 'Liters'
-                                                            },
-                                                            gridLines: {
-                                                                color: 'rgba(0, 0, 0, 0.1)'
-                                                            }
-                                                        }
-                                                    ]
-                                                },
-                                                legend: {
-                                                    display: false
-                                                }
-                                            }
-                                        });
-                                    </script>
+                                    <script></script>
                                 </div>
                             </div>
                         </div>
@@ -251,7 +174,7 @@
                             <h2 class="heading-tertiary">Today's Consume:</h2>
                             <div class="water-animation water-animation--big">
                                 <div class="info info--big">
-                                    <p class="info__text info__text--big">50<span>%</span></p>
+                                    <p class="info__text info__text--big water-animation__value">50<span>%</span></p>
                                     <div class="wave transparentwhite wave__1"></div>
                                     <div class="wave transparentblue wave__2"></div>
                                     <div class="wave transparentwhite wave__3"></div>

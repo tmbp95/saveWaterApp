@@ -137,6 +137,7 @@
     border-radius: 22%;
     transition: all 1.4s linear;
     animation: waves 3.4s linear reverse infinite;
+    -webkit-transform: translateZ(0);
 
     &__1 {
         width: 25rem;
