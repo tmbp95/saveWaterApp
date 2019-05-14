@@ -1,4 +1,4 @@
-import { elements } from './base';
+import { elements, consumeTypes } from './base';
 
 // Clean up all entries of the table
 export const clearConsumesTable = () => {
@@ -113,4 +113,12 @@ export const renderWaterAnimation = percentage => {
     //////////////////////////////////////////////////////////////////////////////
     // TODO: IF THE BOTTOMPOSITION IS TO BIG, IT WILL GET HIDDEN BY THE OVERFLOW
     //////////////////////////////////////////////////////////////////////////////
+};
+
+export const renderTextInfo = (activeItem, nameItem) => {
+    // Change the UI text with the new type of consume
+    elements.typeConsumeText.textContent = nameItem;
+
+    // Change the UI text with the amount of liters per minute
+    elements.waterPerMinuteText.textContent = consumeTypes[activeItem];
 };

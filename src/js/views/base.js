@@ -13,7 +13,16 @@ export const elements = {
     tableConsumes: document.querySelector('#consume-table'),
     chartConsumes: document.querySelector('#myChart'),
     waterAnimationBig: document.querySelector('.info--big'),
-    typeConsume: document.querySelector('.sidebar__nav')
+    typeConsume: document.querySelector('.sidebar__nav'),
+    typeConsumeText: document.querySelector('.water-animation__type'),
+    waterPerMinuteText: document.querySelector('.waterPerMinute'),
+    timer: document.querySelector('.timer__auto')
+};
+
+export const consumeTypes = {
+    shower: 12,
+    handsWash: 5,
+    toiletFlush: 10
 };
 
 export const elementStrings = {

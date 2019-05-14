@@ -87,11 +87,10 @@ const controlSection = menuOption => {
  **/
 const controlAddConsume = () => {
     // Control Sidebar to check whhich is the type of consume
-    controlSidebar();
+    const [activeItem, nameItem] = controlSidebar();
 
-    // Change the UI text with the new type of consume
-
-    // Change the UI text with the amount of liters per minute
+    // Render UI text about type of consume and liters per minute
+    consumeView.renderTextInfo(activeItem.dataset.itemid, nameItem);
 
     // Control Timer to get user input
     controlTimer();
@@ -101,26 +100,91 @@ const controlAddConsume = () => {
  * SIDEBAR CONTROLLER
  **/
 const controlSidebar = () => {
-    const childNodes = [...elements.typeConsume.childNodes];
-    const activeItem = childNodes.reduce((total, elm) => {
-        if (elm.classList && elm.classList.contains('sidebar__item--active')) {
-            total = elm;
+    // Convert Node List of node list's child nodes to an Array
+    const childNodesArr = [...elements.typeConsume.childNodes];
+    // Find the active item in the sidebar
+    const activeItem = childNodesArr.reduce((active, child) => {
+        if (child.classList && child.classList.contains('sidebar__item--active')) {
+            active = child;
         }
-        return total;
+        return active;
     }, null);
 
-    console.log(activeItem);
+    // Depending on the active's sidebar item, create the full name type of consume
+    let nameItem;
+    switch (activeItem.dataset.itemid) {
+        case 'shower':
+            nameItem = 'Shower';
+            break;
+        case 'handsWash':
+            nameItem = 'Hands Wash';
+            break;
+        case 'toiletFlush':
+            nameItem = 'Toilet Flush';
+            break;
+        default:
+            nameItem = 'Error';
+    }
 
-    elements.typeConsume.addEventListener('click', e => {
-        const id = e.target.closest('.sidebar__item').dataset.itemid;
-        console.log(id);
-    });
+    // Return both activeItem and the full name of the type of consume
+    return [activeItem, nameItem];
 };
+
+// Control Sidebar on Click event to change the text and the active's sidebar item
+elements.typeConsume.addEventListener('click', e => {
+    // Get the clicked sidebar Item
+    const id = e.target.closest('.sidebar__item').dataset.itemid;
+
+    // Depending on the clicked sidebar item, create the full name type of consume
+    let nameItem;
+    switch (id) {
+        case 'shower':
+            nameItem = 'Shower';
+            break;
+        case 'handsWash':
+            nameItem = 'Hands Wash';
+            break;
+        case 'toiletFlush':
+            nameItem = 'Toilet Flush';
+            break;
+        default:
+            nameItem = 'Error';
+    }
+
+    // Convert Node List of node list's child nodes to an Array
+    const childNodesArr = [...elements.typeConsume.childNodes];
+    // Find the active item in the sidebar
+    const activeItem = childNodesArr.reduce((active, child) => {
+        if (child.classList && child.classList.contains('sidebar__item--active')) {
+            active = child;
+        }
+        return active;
+    }, null);
+
+    // Remove current class from Sidebar item
+    activeItem.classList.remove('sidebar__item--active');
+
+    // Change the UI Sidebar item
+    e.target.closest('.sidebar__item').classList.add('sidebar__item--active');
+
+    // Render UI text about type of consume and liters per minute
+    consumeView.renderTextInfo(id, nameItem);
+});
 
 /**
  * TIMER CONTROLLER
  **/
-const controlTimer = () => {};
+const controlTimer = () => {
+    let now = new Date();
+    const endtime = new Date(now.getTime() + 5000);
+    console.log(now, endtime);
+    while (now <= endtime) {
+        now = new Date();
+        console.log(now);
+    }
+};
+
+elements.timer.addEventListener('click', controlTimer);
 
 /**
  * MANAGE CONTROLLER
