@@ -73,7 +73,7 @@ const controlSection = menuOption => {
             // controlAbout();
             break;
         case 'addConsume':
-            // controlAddConsume();
+            controlAddConsume();
             break;
         case 'manage':
             controlManage();
@@ -81,6 +81,46 @@ const controlSection = menuOption => {
         default:
     }
 };
+
+/**
+ * ADDCONSUME CONTROLLER
+ **/
+const controlAddConsume = () => {
+    // Control Sidebar to check whhich is the type of consume
+    controlSidebar();
+
+    // Change the UI text with the new type of consume
+
+    // Change the UI text with the amount of liters per minute
+
+    // Control Timer to get user input
+    controlTimer();
+};
+
+/**
+ * SIDEBAR CONTROLLER
+ **/
+const controlSidebar = () => {
+    const childNodes = [...elements.typeConsume.childNodes];
+    const activeItem = childNodes.reduce((total, elm) => {
+        if (elm.classList && elm.classList.contains('sidebar__item--active')) {
+            total = elm;
+        }
+        return total;
+    }, null);
+
+    console.log(activeItem);
+
+    elements.typeConsume.addEventListener('click', e => {
+        const id = e.target.closest('.sidebar__item').dataset.itemid;
+        console.log(id);
+    });
+};
+
+/**
+ * TIMER CONTROLLER
+ **/
+const controlTimer = () => {};
 
 /**
  * MANAGE CONTROLLER

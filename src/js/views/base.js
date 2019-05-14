@@ -12,7 +12,8 @@ export const elements = {
     dataBox: document.querySelector('.data-box'),
     tableConsumes: document.querySelector('#consume-table'),
     chartConsumes: document.querySelector('#myChart'),
-    waterAnimationBig: document.querySelector('.info--big')
+    waterAnimationBig: document.querySelector('.info--big'),
+    typeConsume: document.querySelector('.sidebar__nav')
 };
 
 export const elementStrings = {
