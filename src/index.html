@@ -98,11 +98,12 @@
                         <div class="timer">
                             <div class="timer__arrow"><span>&#10148;</span></div>
                             <h2 class="heading-tertiary">Add your water consumption time:</h2>
-                            <div class="timer__auto">
+                            <div class="timer__auto timer__auto-pause">
                                 <span class="timer__text">00:00:00</span>
+                                <span class="timer__info">Press to Start</span>
                             </div>
-                            <p class="paragraph">- or -</p>
-                            <div class="timer__counter">
+                            <p class="paragraph" style="display: none">- or -</p>
+                            <div class="timer__counter" style="display: none">
                                 <div class="timer__boxes">
                                     <button class="btn btn__add">+</button>
                                     <input type="number" class="input input__hours" value="00" min="0" max="24" />
@@ -119,7 +120,7 @@
                                     <button class="btn btn__remove">-</button>
                                 </div>
                             </div>
-                            <button class="btn timer__save">Save</button>
+                            <button class="btn timer__save" style="display: none">Save</button>
                         </div>
                     </section>
 

@@ -93,7 +93,7 @@ const controlAddConsume = () => {
     consumeView.renderTextInfo(activeItem.dataset.itemid, nameItem);
 
     // Control Timer to get user input
-    controlTimer();
+    // controlTimer();
 };
 
 /**
@@ -174,17 +174,90 @@ elements.typeConsume.addEventListener('click', e => {
 /**
  * TIMER CONTROLLER
  **/
-const controlTimer = () => {
-    let now = new Date();
-    const endtime = new Date(now.getTime() + 5000);
-    console.log(now, endtime);
-    while (now <= endtime) {
-        now = new Date();
-        console.log(now);
-    }
-};
 
-elements.timer.addEventListener('click', controlTimer);
+// Start the timer with 0 seconds
+let time = 0;
+let firstClick = true;
+
+const secondsInADay = 60 * 60 * 1000 * 24,
+    secondsInAHour = 60 * 60 * 1000;
+
+// Set the interval to -1 meaning there is no pause
+let timerInterval = -1;
+
+elements.timer.addEventListener('click', () => {
+    // If it IS the first time the user clicks do something
+    if (firstClick) {
+        // Change the UI of the timer element
+        elements.timer.classList.toggle('timer__auto-pause');
+        // Change the info text from the timer element to display Press to Pause
+        elements.timer.childNodes[3].textContent = `Press to Pause`;
+
+        // Start counting the time in cycles of 1 second
+        timerInterval = setInterval(function() {
+            // Adds 1000 milliseconds every second
+            time = time + 1000;
+
+            // From the time variable check the amount of hours
+            let hours = Math.floor(((time % secondsInADay) / secondsInAHour) * 1);
+            // From the time variable check the amount of minutes
+            let mins = Math.floor((((time % secondsInADay) % secondsInAHour) / (60 * 1000)) * 1);
+            // From the time variable check the amount of seconds
+            let secs = Math.floor(((((time % secondsInADay) % secondsInAHour) % (60 * 1000)) / 1000) * 1);
+            // Fix the 0s when the value is lower then 10.
+            hours = hours < 10 ? `0${hours}` : `${hours}`;
+            mins = mins < 10 ? `0${mins}` : `${mins}`;
+            secs = secs < 10 ? `0${secs}` : `${secs}`;
+
+            // Change the text displayed in the timer element.
+            elements.timer.childNodes[1].textContent = `${hours}:${mins}:${secs}`;
+        }, 1000);
+
+        // Change the firsClick flag to false
+        firstClick = false;
+    }
+    // If it is NOT the first time the user clicks do something
+    else {
+        // If there is NO PAUSE
+        if (timerInterval == -1) {
+            // Change the UI of the timer element
+            elements.timer.classList.toggle('timer__auto-pause');
+            // Change the info text from the timer element to display Press to Pause
+            elements.timer.childNodes[3].textContent = `Press to Pause`;
+
+            // Start counting the time in cycles of 1 second
+            timerInterval = setInterval(function() {
+                // Adds 1000 milliseconds every second
+                time = time + 1000;
+
+                // From the time variable check the amount of hours
+                let hours = Math.floor(((time % secondsInADay) / secondsInAHour) * 1);
+                // From the time variable check the amount of minutes
+                let mins = Math.floor((((time % secondsInADay) % secondsInAHour) / (60 * 1000)) * 1);
+                // From the time variable check the amount of seconds
+                let secs = Math.floor(((((time % secondsInADay) % secondsInAHour) % (60 * 1000)) / 1000) * 1);
+                // Fix the 0s when the value is lower then 10.
+                hours = hours < 10 ? `0${hours}` : `${hours}`;
+                mins = mins < 10 ? `0${mins}` : `${mins}`;
+                secs = secs < 10 ? `0${secs}` : `${secs}`;
+
+                // Change the text displayed in the timer element.
+                elements.timer.childNodes[1].textContent = `${hours}:${mins}:${secs}`;
+            }, 1000);
+        }
+        // If there IS PAUSE
+        else {
+            // Change the UI of the timer element
+            elements.timer.classList.toggle('timer__auto-pause');
+            // Change the info text from the timer element to display Press to Continue
+            elements.timer.childNodes[3].textContent = `Press to Continue`;
+
+            // Clear the interval and set pause
+            clearInterval(timerInterval);
+            timerInterval = -1;
+        }
+    }
+});
 
 /**
  * MANAGE CONTROLLER
