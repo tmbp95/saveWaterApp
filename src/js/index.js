@@ -266,47 +266,19 @@ const controlInputs = e => {
         const typeInput = e.target.parentNode.childNodes[3];
         const typeInputValue = +typeInput.value;
         newValue = typeInputValue + 1;
-        if (typeInput.dataset.type === 'hours' && typeInputValue == 24) {
-            e.target.disabled = true;
-        } else {
-            e.target.parentNode.childNodes[5].disabled = false;
-        }
-        if (typeInput.dataset.type === 'hours' && newValue > 24) {
-            newValue = 24;
-            typeInput.classList.add('alert');
-        } else if (typeInput.dataset.type === 'hours' && newValue <= 24 && newValue >= 0) {
-            typeInput.classList.remove('alert');
-        }
-
-        if (typeInput.dataset.type === 'minutes' && newValue > 60) {
-            newValue = 60;
-            typeInput.style.backgroundColor = 'red';
-        } else if (typeInput.dataset.type === 'hours' && newValue <= 60 && newValue >= 0) {
-            typeInput.style.backgroundColor = 'white';
-        }
-
-        if (typeInput.dataset.type === 'seconds' && newValue > 60) {
-            newValue = 60;
-            typeInput.style.backgroundColor = 'red';
-        } else if (typeInput.dataset.type === 'hours' && newValue <= 60 && newValue >= 0) {
-            typeInput.style.backgroundColor = 'white';
-        }
 
         if (parseInt(newValue, 10) < 10) newValue = '0' + newValue;
         typeInput.value = newValue;
+        toggleDisable(typeInput);
     }
     if (targetClassList.includes('btn__remove')) {
         const typeInput = e.target.parentNode.childNodes[3];
         const typeInputValue = +typeInput.value;
         newValue = typeInputValue - 1;
-        if (typeInput.dataset.type === 'hours' && newValue > 24) {
-            newValue = 24;
-            typeInput.classList.add('alert');
-        } else if (typeInput.dataset.type === 'hours' && newValue <= 24 && newValue >= 0) {
-            typeInput.classList.remove('alert');
-        }
+
         if (parseInt(newValue, 10) < 10) newValue = '0' + newValue;
         typeInput.value = newValue;
+        toggleDisable(typeInput);
     }
 };
 
@@ -316,9 +288,23 @@ const resetInputs = () => {
     timerInputsChilds.forEach(child => {
         if (child.classList && child.classList.contains('timer__boxes')) {
             const typeInput = child.childNodes[3];
+            // Set value of input to 0
             typeInput.value = '00';
+            // Reset Inputs
+            toggleDisable(typeInput);
         }
     });
+};
+
+const toggleDisable = typeInput => {
+    // Set the incremental button and the decremental button
+    const incButton = typeInput.parentNode.childNodes[1];
+    const decButton = typeInput.parentNode.childNodes[7];
+
+    // If the value of the input is equal to its max then disable the inc button
+    incButton.disabled = +typeInput.value == +typeInput.max;
+    // If the value of the input is equal to its min then disable the dec button
+    decButton.disabled = +typeInput.value == +typeInput.min;
 };
 
 window.addEventListener('load', resetInputs);
