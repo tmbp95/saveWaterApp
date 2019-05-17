@@ -16,7 +16,8 @@ export const elements = {
     typeConsume: document.querySelector('.sidebar__nav'),
     typeConsumeText: document.querySelector('.water-animation__type'),
     waterPerMinuteText: document.querySelector('.waterPerMinute'),
-    timer: document.querySelector('.timer__auto')
+    timer: document.querySelector('.timer__auto'),
+    timerInputs: document.querySelector('.timer__counter')
 };
 
 export const consumeTypes = {

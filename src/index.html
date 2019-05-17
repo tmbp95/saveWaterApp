@@ -99,28 +99,28 @@
                             <div class="timer__arrow"><span>&#10148;</span></div>
                             <h2 class="heading-tertiary">Add your water consumption time:</h2>
                             <div class="timer__auto timer__auto-pause">
-                                <span class="timer__text">00:00:00</span>
-                                <span class="timer__info">Press to Start</span>
+                                <p class="timer__text">00:00:00</p>
+                                <p class="timer__info">Press to Start</p>
                             </div>
-                            <p class="paragraph" style="display: none">- or -</p>
-                            <div class="timer__counter" style="display: none">
+                            <p class="paragraph">- or -</p>
+                            <div class="timer__counter">
                                 <div class="timer__boxes">
                                     <button class="btn btn__add">+</button>
-                                    <input type="number" class="input input__hours" value="00" min="0" max="24" />
+                                    <input type="number" class="input input__type" data-type="hours" value="0" min="0" max="24" />
                                     <button class="btn btn__remove">-</button>
                                 </div>
                                 <div class="timer__boxes">
                                     <button class="btn btn__add">+</button>
-                                    <input type="number" class="input input__minutes" value="00" min="0" max="60" />
+                                    <input type="number" class="input input__type" data-type="minutes" value="0" min="0" max="60" />
                                     <button class="btn btn__remove">-</button>
                                 </div>
                                 <div class="timer__boxes">
                                     <button class="btn btn__add">+</button>
-                                    <input type="number" class="input input__seconds" value="00" min="0" max="60" />
+                                    <input type="number" class="input input__type" data-type="seconds" value="0" min="0" max="60" />
                                     <button class="btn btn__remove">-</button>
                                 </div>
                             </div>
-                            <button class="btn timer__save" style="display: none">Save</button>
+                            <button class="btn timer__save">Save</button>
                         </div>
                     </section>
 
