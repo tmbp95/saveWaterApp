@@ -1,5 +1,5 @@
 .data-box {
-    width: 70%;
+    width: 80%;
 
     &__table {
         opacity: 1;
@@ -46,4 +46,47 @@
             height: 100% !important;
         }
     }
+
+    &__buttons {
+        margin-top: 1rem;
+    }
+}
+
+.btn-inline {
+    color: $color-primary;
+    font-size: 1.2rem;
+    border: none;
+    background-color: #f9f5f3;
+    padding: 0.8rem 1.2rem;
+    border-radius: 10rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s;
+}
+.btn-inline svg {
+    height: 1.5rem;
+    width: 1.5rem;
+    fill: currentColor;
+    margin: 0 0.2rem;
+}
+.btn-inline span {
+    margin: 0 0.4rem;
+}
+.btn-inline:hover {
+    color: $color-primary-light;
+    background-color: #f2efee;
+}
+.btn-inline:focus {
+    outline: none;
+}
+
+.results__btn--prev,
+.likes__btn--prev {
+    float: left;
+    flex-direction: row-reverse;
+}
+.results__btn--next,
+.likes__btn--next {
+    float: right;
 }

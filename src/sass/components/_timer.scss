@@ -19,6 +19,7 @@
         height: 15rem;
         border-radius: 50%;
         margin-top: 2rem;
+        margin-bottom: 1rem;
         position: relative;
         cursor: pointer;
 
@@ -80,8 +81,14 @@
 
     &__save {
         margin-top: 1rem;
-        padding: 0.5rem 5rem;
+        padding: 0.5rem 3rem;
         border-radius: 8px;
+    }
+    &__stop {
+        margin-top: 1rem;
+        padding: 0.5rem 3rem;
+        border-radius: 8px;
+        margin-right: 3px;
     }
 
     &__boxes {
@@ -96,7 +103,7 @@
 
         span {
             position: absolute;
-            top: 28%;
+            top: 35%;
             left: 70%;
             font-size: $default-font-size * 0.7;
         }

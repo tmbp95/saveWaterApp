@@ -57,3 +57,15 @@ body {
     margin-top: 1rem;
     color: #fdfbfb;
 }
+
+.link {
+    color: $color-primary;
+}
+
+.small-text {
+    font-size: $default-font-size * 0.7;
+}
+
+.clickable {
+    cursor: pointer;
+}

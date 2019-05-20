@@ -2,6 +2,7 @@ export const elements = {
     // searchForm: document.querySelector('.search'),
     // searchInput: document.querySelector('.search__field'),
     menu: document.querySelectorAll('.topbar__item'),
+    contentLeft: document.querySelector('.content__left'),
     sections: document.querySelectorAll('section'),
     sectionAbout: document.querySelector('.section-about'),
     sectionAddConsume: document.querySelector('.section-timer'),
@@ -17,7 +18,10 @@ export const elements = {
     typeConsumeText: document.querySelector('.water-animation__type'),
     waterPerMinuteText: document.querySelector('.waterPerMinute'),
     timer: document.querySelector('.timer__auto'),
-    timerInputs: document.querySelector('.timer__counter')
+    timerInputs: document.querySelector('.timer__counter'),
+    stopButton: document.querySelector('.timer__stop'),
+    saveButton: document.querySelector('.timer__save'),
+    tableButtons: document.querySelector('.data-box__buttons')
 };
 
 export const consumeTypes = {

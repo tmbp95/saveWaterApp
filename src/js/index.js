@@ -1,5 +1,6 @@
 // Global app controller
 import Consume from './models/Consume';
+import ConsumeList from './models/ConsumeList';
 
 import * as consumeView from './views/consumeView';
 
@@ -8,7 +9,8 @@ import '../sass/main.scss';
 
 /** Global state of the app
  * - Consume object
- * - ListWeek object
+ * - ListConsume objec
+ * - Time object
  */
 const state = {};
 
@@ -28,17 +30,37 @@ const state = {};
 //     Sunday: 0
 // };
 
-const consume1 = new Consume('shower', 10, new Date('05/14/2019'));
-const consume2 = new Consume('shower', 15, new Date('05/15/2019'));
-const consume3 = new Consume('shower', 15, new Date('05/16/2019'));
-const consume4 = new Consume('shower', 15, new Date('05/17/2019'));
+/**
+ * INITIAL VALUES JUST FOR TESTING THE APP
+ **/
+const date1 = new Date();
+date1.setDate(date1.getDate() - 4);
 
+const date2 = new Date();
+date2.setDate(date2.getDate() - 3);
+
+const date3 = new Date();
+date3.setDate(date3.getDate() - 2);
+
+const date4 = new Date();
+date4.setDate(date4.getDate() - 1);
+
+state.consumes = new ConsumeList();
+const consume1 = new Consume('shower', 'Shower', 800, date1);
+const consume2 = new Consume('shower', 'Shower', 600, date2);
+const consume3 = new Consume('shower', 'Shower', 800, date3);
+const consume4 = new Consume('shower', 'Shower', 700, date4);
+const consume5 = new Consume('shower', 'Shower', 600, new Date());
 consume1.calcConsume();
 consume2.calcConsume();
 consume3.calcConsume();
 consume4.calcConsume();
-
-state.consumes = [consume1, consume2, consume3, consume4];
+consume5.calcConsume();
+state.consumes.addConsume(consume5);
+state.consumes.addConsume(consume4);
+state.consumes.addConsume(consume3);
+state.consumes.addConsume(consume2);
+state.consumes.addConsume(consume1);
 
 /**
  * MENU CONTROLLER
@@ -70,7 +92,7 @@ const controlMenu = () => {
 const controlSection = menuOption => {
     switch (menuOption) {
         case 'about':
-            // controlAbout();
+            controlAbout();
             break;
         case 'addConsume':
             controlAddConsume();
@@ -78,8 +100,15 @@ const controlSection = menuOption => {
         case 'manage':
             controlManage();
             break;
-        default:
     }
+};
+
+/**
+ * ABOUT CONTROLLER
+ **/
+const controlAbout = () => {
+    // Remove Shadow from the UI
+    consumeView.removeShadow();
 };
 
 /**
@@ -88,6 +117,9 @@ const controlSection = menuOption => {
 const controlAddConsume = () => {
     // Control Sidebar to check whhich is the type of consume
     const [activeItem, nameItem] = controlSidebar();
+
+    // Render Shadow in the UI
+    consumeView.renderShadow();
 
     // Render UI text about type of consume and liters per minute
     consumeView.renderTextInfo(activeItem.dataset.itemid, nameItem);
@@ -111,20 +143,7 @@ const controlSidebar = () => {
     }, null);
 
     // Depending on the active's sidebar item, create the full name type of consume
-    let nameItem;
-    switch (activeItem.dataset.itemid) {
-        case 'shower':
-            nameItem = 'Shower';
-            break;
-        case 'handsWash':
-            nameItem = 'Hands Wash';
-            break;
-        case 'toiletFlush':
-            nameItem = 'Toilet Flush';
-            break;
-        default:
-            nameItem = 'Error';
-    }
+    const nameItem = getItemName(activeItem.dataset.itemid);
 
     // Return both activeItem and the full name of the type of consume
     return [activeItem, nameItem];
@@ -133,23 +152,10 @@ const controlSidebar = () => {
 // Control Sidebar on Click event to change the text and the active's sidebar item
 elements.typeConsume.addEventListener('click', e => {
     // Get the clicked sidebar Item
-    const id = e.target.closest('.sidebar__item').dataset.itemid;
+    const itemID = e.target.closest('.sidebar__item').dataset.itemid;
 
     // Depending on the clicked sidebar item, create the full name type of consume
-    let nameItem;
-    switch (id) {
-        case 'shower':
-            nameItem = 'Shower';
-            break;
-        case 'handsWash':
-            nameItem = 'Hands Wash';
-            break;
-        case 'toiletFlush':
-            nameItem = 'Toilet Flush';
-            break;
-        default:
-            nameItem = 'Error';
-    }
+    const nameItem = getItemName(itemID);
 
     // Convert Node List of node list's child nodes to an Array
     const childNodesArr = [...elements.typeConsume.childNodes];
@@ -168,19 +174,29 @@ elements.typeConsume.addEventListener('click', e => {
     e.target.closest('.sidebar__item').classList.add('sidebar__item--active');
 
     // Render UI text about type of consume and liters per minute
-    consumeView.renderTextInfo(id, nameItem);
+    consumeView.renderTextInfo(itemID, nameItem);
 });
+
+// Get Item Name from the itemID (shower = Shower, handsWash = Hands Wash, etc.)
+const getItemName = itemID => {
+    switch (itemID) {
+        case 'shower':
+            return 'Shower';
+        case 'handsWash':
+            return 'Hands Wash';
+        case 'toiletFlush':
+            return 'Toilet Flush';
+        default:
+            return 'Error';
+    }
+};
 
 /**
  * TIMER CONTROLLER
  **/
 
-// Start the timer with 0 seconds
-let time = 0;
+// Set the first Click to true
 let firstClick = true;
-
-const secondsInADay = 60 * 60 * 1000 * 24,
-    secondsInAHour = 60 * 60 * 1000;
 
 // Set the interval to -1 meaning there is no pause
 let timerInterval = -1;
@@ -188,30 +204,14 @@ let timerInterval = -1;
 elements.timer.addEventListener('click', () => {
     // If it IS the first time the user clicks do something
     if (firstClick) {
-        // Change the UI of the timer element
-        elements.timer.classList.toggle('timer__auto-pause');
-        // Change the info text from the timer element to display Press to Pause
-        elements.timer.childNodes[3].textContent = `Press to Pause`;
+        // Reset the Timer to inital configuration
+        resetTimer();
+
+        // Prepare the UI of the timer element to Pause configuration
+        consumeView.renderTextTimer('pause');
 
         // Start counting the time in cycles of 1 second
-        timerInterval = setInterval(function() {
-            // Adds 1000 milliseconds every second
-            time = time + 1000;
-
-            // From the time variable check the amount of hours
-            let hours = Math.floor(((time % secondsInADay) / secondsInAHour) * 1);
-            // From the time variable check the amount of minutes
-            let mins = Math.floor((((time % secondsInADay) % secondsInAHour) / (60 * 1000)) * 1);
-            // From the time variable check the amount of seconds
-            let secs = Math.floor(((((time % secondsInADay) % secondsInAHour) % (60 * 1000)) / 1000) * 1);
-            // Fix the 0s when the value is lower then 10.
-            hours = hours < 10 ? `0${hours}` : `${hours}`;
-            mins = mins < 10 ? `0${mins}` : `${mins}`;
-            secs = secs < 10 ? `0${secs}` : `${secs}`;
-
-            // Change the text displayed in the timer element.
-            elements.timer.childNodes[1].textContent = `${hours}:${mins}:${secs}`;
-        }, 1000);
+        timerInterval = timerIntervalCounter(1000);
 
         // Change the firsClick flag to false
         firstClick = false;
@@ -220,37 +220,16 @@ elements.timer.addEventListener('click', () => {
     else {
         // If there is NO PAUSE
         if (timerInterval == -1) {
-            // Change the UI of the timer element
-            elements.timer.classList.toggle('timer__auto-pause');
-            // Change the info text from the timer element to display Press to Pause
-            elements.timer.childNodes[3].textContent = `Press to Pause`;
+            // Prepare the UI of the timer element to Pause configuration
+            consumeView.renderTextTimer('pause');
 
             // Start counting the time in cycles of 1 second
-            timerInterval = setInterval(function() {
-                // Adds 1000 milliseconds every second
-                time = time + 1000;
-
-                // From the time variable check the amount of hours
-                let hours = Math.floor(((time % secondsInADay) / secondsInAHour) * 1);
-                // From the time variable check the amount of minutes
-                let mins = Math.floor((((time % secondsInADay) % secondsInAHour) / (60 * 1000)) * 1);
-                // From the time variable check the amount of seconds
-                let secs = Math.floor(((((time % secondsInADay) % secondsInAHour) % (60 * 1000)) / 1000) * 1);
-                // Fix the 0s when the value is lower then 10.
-                hours = hours < 10 ? `0${hours}` : `${hours}`;
-                mins = mins < 10 ? `0${mins}` : `${mins}`;
-                secs = secs < 10 ? `0${secs}` : `${secs}`;
-
-                // Change the text displayed in the timer element.
-                elements.timer.childNodes[1].textContent = `${hours}:${mins}:${secs}`;
-            }, 1000);
+            timerInterval = timerIntervalCounter(1000);
         }
-        // If there IS PAUSE
+        // If there IS a PAUSE
         else {
-            // Change the UI of the timer element
-            elements.timer.classList.toggle('timer__auto-pause');
-            // Change the info text from the timer element to display Press to Continue
-            elements.timer.childNodes[3].textContent = `Press to Continue`;
+            // Prepare the UI of the timer element to Continue configuration
+            consumeView.renderTextTimer('continue');
 
             // Clear the interval and set pause
             clearInterval(timerInterval);
@@ -259,61 +238,136 @@ elements.timer.addEventListener('click', () => {
     }
 });
 
-const controlInputs = e => {
-    const targetClassList = [...e.target.classList];
-    let newValue = 0;
-    if (targetClassList.includes('btn__add')) {
-        const typeInput = e.target.parentNode.childNodes[3];
-        const typeInputValue = +typeInput.value;
-        newValue = typeInputValue + 1;
+const timerIntervalCounter = milliseconds => {
+    const interval = setInterval(function() {
+        // Adds 1 second every second
+        state.time += 1;
 
-        if (parseInt(newValue, 10) < 10) newValue = '0' + newValue;
-        typeInput.value = newValue;
-        toggleDisable(typeInput);
-    }
-    if (targetClassList.includes('btn__remove')) {
-        const typeInput = e.target.parentNode.childNodes[3];
-        const typeInputValue = +typeInput.value;
-        newValue = typeInputValue - 1;
+        // Change the UI to the timer element to the time that has already passed
+        consumeView.renderTimeTimer(state.time);
+    }, milliseconds);
 
-        if (parseInt(newValue, 10) < 10) newValue = '0' + newValue;
-        typeInput.value = newValue;
-        toggleDisable(typeInput);
-    }
+    // Reteurn the interval ID
+    return interval;
 };
 
-const resetInputs = () => {
-    let timerInputsChilds = elements.timerInputs.childNodes;
+const resetTimer = () => {
+    // Reset value of timer
+    elements.timer.childNodes[1].textContent = `00:00:00`;
+    state.time = 0;
 
-    timerInputsChilds.forEach(child => {
-        if (child.classList && child.classList.contains('timer__boxes')) {
-            const typeInput = child.childNodes[3];
-            // Set value of input to 0
-            typeInput.value = '00';
-            // Reset Inputs
+    // Prepare the UI of the timer element to Start configuration
+    consumeView.renderTextTimer('start');
+
+    // Clear the interval and set pause
+    clearInterval(timerInterval);
+    timerInterval = -1;
+    firstClick = true;
+};
+
+{
+    // TODOOOOO!!!!
+    const controlInputs = e => {
+        const targetClassList = [...e.target.classList];
+        let newValue = 0;
+        if (targetClassList.includes('btn__add')) {
+            const typeInput = e.target.parentNode.childNodes[3];
+            const typeInputValue = +typeInput.value;
+            newValue = typeInputValue + 1;
+
+            if (parseInt(newValue, 10) < 10) newValue = '0' + newValue;
+            typeInput.value = newValue;
             toggleDisable(typeInput);
         }
-    });
+        if (targetClassList.includes('btn__remove')) {
+            const typeInput = e.target.parentNode.childNodes[3];
+            const typeInputValue = +typeInput.value;
+            newValue = typeInputValue - 1;
+
+            if (parseInt(newValue, 10) < 10) newValue = '0' + newValue;
+            typeInput.value = newValue;
+            toggleDisable(typeInput);
+        }
+    };
+
+    // TODOOOOO!!!!
+    const resetInputs = () => {
+        let timerInputsChilds = elements.timerInputs.childNodes;
+
+        timerInputsChilds.forEach(child => {
+            if (child.classList && child.classList.contains('timer__boxes')) {
+                const typeInput = child.childNodes[3];
+                // Set value of input to 0
+                typeInput.value = '00';
+                // Reset Inputs
+                toggleDisable(typeInput);
+            }
+        });
+    };
+
+    // TODOOOOO!!!!
+    const toggleDisable = typeInput => {
+        // Set the incremental button and the decremental button
+        const incButton = typeInput.parentNode.childNodes[1];
+        const decButton = typeInput.parentNode.childNodes[7];
+
+        // If the value of the input is equal to its max then disable the inc button
+        incButton.disabled = +typeInput.value == +typeInput.max;
+        // If the value of the input is equal to its min then disable the dec button
+        decButton.disabled = +typeInput.value == +typeInput.min;
+    };
+}
+/**
+ * SAVE CONSUMES CONTROLLER
+ **/
+const controlSaveConsume = type => {
+    // Pick the active item from the sidebar
+    let [activeItem, nameItem] = controlSidebar();
+    activeItem = activeItem.dataset.itemid;
+
+    // if the save button was from the timer... TODO
+    if (type === 'timer') {
+        // If the consume state is empty, create one
+        if (!state.consumes) state.consumes = new ConsumeList();
+
+        // If there IS water consumption do something
+        if (state.time > 0) {
+            console.log('Creating consume', { activeItem, nameItem, timeSeconds: state.time, date: new Date() });
+            const consume = new Consume(activeItem, nameItem, state.time, new Date());
+            consume.calcConsume();
+            state.consumes.addConsume(consume);
+        }
+        // If there is NO consume
+        else {
+            console.log('Oups, seems like there is no consume!');
+        }
+
+        // Prepare the UI of the timer element to Restart configuration
+        consumeView.renderTextTimer('restart');
+
+        // Clear the interval and set Stop
+        clearInterval(timerInterval);
+        timerInterval = -1;
+        firstClick = true;
+    }
 };
 
-const toggleDisable = typeInput => {
-    // Set the incremental button and the decremental button
-    const incButton = typeInput.parentNode.childNodes[1];
-    const decButton = typeInput.parentNode.childNodes[7];
-
-    // If the value of the input is equal to its max then disable the inc button
-    incButton.disabled = +typeInput.value == +typeInput.max;
-    // If the value of the input is equal to its min then disable the dec button
-    decButton.disabled = +typeInput.value == +typeInput.min;
-};
-
-window.addEventListener('load', resetInputs);
+window.addEventListener('load', () => {
+    // resetInputs();
+    resetTimer();
+});
 elements.timerInputs.addEventListener('click', event => controlInputs(event));
+
+elements.saveButton.addEventListener('click', () => controlSaveConsume('timer'));
+elements.stopButton.addEventListener('click', resetTimer);
 
 /**
  * MANAGE CONTROLLER
  **/
 const controlManage = () => {
+    // Render Shadow in the UI
+    consumeView.renderShadow();
+
     // Control Toggle to check whether to show Table or Chart
     controlToggle();
 
@@ -350,8 +404,17 @@ const controlTable = () => {
     consumeView.clearConsumesTable();
 
     // Render consumes to table
-    consumeView.renderConsumesTable(state.consumes);
+    consumeView.renderConsumesTable(state.consumes.list);
 };
+
+elements.tableButtons.addEventListener('click', e => {
+    const btn = e.target.closest('.btn-inline');
+    if (btn) {
+        const goToPage = parseInt(btn.dataset.goto, 5);
+        consumeView.clearConsumesTable();
+        consumeView.renderConsumesTable(state.consumes.list, goToPage);
+    }
+});
 
 /**
  * CHART CONTROLLER
@@ -362,10 +425,16 @@ const controlChart = () => {
     elements.chart.style.display = 'block';
 
     // Create ListWeek to convert the Consumes State into an array of liters per week day
-    const [_, arrWeek] = createWeekStruct();
+    const [objWeek, arrWeek] = createWeekStruct();
+
+    // Insert into an array the days of week ordered from today-6 to today
+    const arrDays = [];
+    Object.keys(objWeek).map(igKey => {
+        arrDays.push(igKey);
+    });
 
     // Render the Chart with the array of liter per week day
-    consumeView.renderChart(arrWeek);
+    consumeView.renderChart(arrDays, arrWeek);
 };
 
 /**
@@ -376,7 +445,7 @@ const controlWaterPercentage = () => {
     const [objWeek, _] = createWeekStruct();
 
     // Add each consume date converted to full date, from state.consumes to an array
-    const fullDateArr = state.consumes.map(consume => convertToFullDate(consume.date));
+    const fullDateArr = state.consumes.list.map(consume => convertToFullDate(consume.date));
     // Get Full Date from today's date
     const todayDate = convertToFullDate(new Date());
 
@@ -384,7 +453,7 @@ const controlWaterPercentage = () => {
     const todaysConsume = fullDateArr.reduce((counter, date, index) => {
         if (date == todayDate) {
             // console.log(index - 1);
-            counter += state.consumes[index].liters;
+            counter += state.consumes.list[index].liters;
         }
         return counter;
     }, 0);
@@ -413,26 +482,37 @@ const controlWaterPercentage = () => {
 const createWeekStruct = () => {
     // Set the default weekAmount object pointing each week day to 0 liters
     const weekAmount = {
-        Monday: 0,
-        Tuesday: 0,
-        Wednesday: 0,
-        Thursday: 0,
-        Friday: 0,
-        Saturday: 0,
-        Sunday: 0
+        // Monday: 0,
+        // Tuesday: 0,
+        // Wednesday: 0,
+        // Thursday: 0,
+        // Friday: 0,
+        // Saturday: 0,
+        // Sunday: 0
     };
 
+    for (let i = 6; i >= 0; i--) {
+        let day = new Date();
+        day.setDate(day.getDate() - i);
+        const weekDay = findWeekDay(day);
+        weekAmount[weekDay] = 0;
+    }
+
     // For each consume entry, update the weekAmount Object using the consumed liters per week day
-    const objWeek = state.consumes
+    // BUT only for this week starting at Monday and ending at Sunday
+    const todayDay = new Date();
+    const objWeek = state.consumes.list
         .map(consume => findWeekDay(consume.date))
         .reduce((counter, consumeWeekDay, cur) => {
-            counter[consumeWeekDay] = counter[consumeWeekDay] + state.consumes[cur].liters;
+            const consume = state.consumes.list[cur];
+            // If the day is from the past week but not equal to this day - 7, do something
+            if (consume.date.getDate() >= todayDay.getDate() - 6) {
+                counter[consumeWeekDay] = counter[consumeWeekDay] + consume.liters;
+            }
             return counter;
         }, weekAmount);
 
-    //////////////////////////////////////////////////////////////////////////////
-    // TODO: STILL COUNTING EVEN IF THE CONSUME WAS FROM PAST WEEK
-    //////////////////////////////////////////////////////////////////////////////
+    console.log(objWeek);
 
     // For each objWeek key, create an array containing the consumed liters
     const arrWeek = [];
@@ -458,4 +538,37 @@ const convertToFullDate = date => {
     const day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
     const fullDate = `${year}-${month}-${day}`;
     return fullDate;
+};
+
+/**
+ * Returns the week number for this date.  dowOffset is the day of week the week
+ * "starts" on for your locale - it can be from 0 to 6. If dowOffset is 1 (Monday),
+ * the week returned is the ISO 8601 week number.
+ * @param int dowOffset
+ * @return int
+ */
+Date.prototype.getWeek = function(dowOffset = 1) {
+    /*getWeek() was developed by Nick Baicoianu at MeanFreePath: http://www.meanfreepath.com */
+
+    dowOffset = typeof dowOffset == 'number' ? dowOffset : 0; //default dowOffset to zero
+    var newYear = new Date(this.getFullYear(), 0, 1);
+    var day = newYear.getDay() - dowOffset; //the day of week the year begins on
+    day = day >= 0 ? day : day + 7;
+    var daynum = Math.floor((this.getTime() - newYear.getTime() - (this.getTimezoneOffset() - newYear.getTimezoneOffset()) * 60000) / 86400000) + 1;
+    var weeknum;
+    //if the year starts before the middle of a week
+    if (day < 4) {
+        weeknum = Math.floor((daynum + day - 1) / 7) + 1;
+        if (weeknum > 52) {
+            nYear = new Date(this.getFullYear() + 1, 0, 1);
+            nday = nYear.getDay() - dowOffset;
+            nday = nday >= 0 ? nday : nday + 7;
+            /*if the next year starts before the middle of
+                  the week, it is week #1 of that year*/
+            weeknum = nday < 4 ? 1 : 53;
+        }
+    } else {
+        weeknum = Math.floor((daynum + day - 1) / 7);
+    }
+    return weeknum;
 };
