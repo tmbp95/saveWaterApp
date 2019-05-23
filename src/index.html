@@ -103,10 +103,10 @@
                                 <p class="timer__info">Press to Start</p>
                             </div>
                             <div class="btn__row">
-                                <button class="btn btn__row--alert timer__stop">Stop</button>
-                                <button class="btn timer__save">Save</button>
+                                <button class="btn btn__row--alert timer__timer--stop">Stop</button>
+                                <button class="btn timer__timer--save">Save</button>
                             </div>
-                            <p class="paragraph clickable">- Click <span class="link">here</span> to insert your own value -</p>
+                            <p class="paragraph clickable showInput">- Click <span class="link">here</span> to insert your own value -</p>
                             <div class="timer__counter" style="display: none">
                                 <div class="timer__boxes">
                                     <button class="btn btn__add">+</button>
@@ -127,6 +127,9 @@
                                     <button class="btn btn__remove">-</button>
                                 </div>
                             </div>
+                            <div class="btn__row" >
+                                <button class="btn timer__input--save" style="display: none">Save</button>
+                            </div>
                         </div>
                     </section>
 
@@ -144,27 +147,29 @@
                             </div>
                             <div class="data-box">
                                 <div class="data-box__table">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Date</th>
-                                                <th>Type</th>
-                                                <th>Mins</th>
-                                                <th>Liters</th>
-                                                <th>Options</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="consume-table">
-                                            <!-- 
+                                    <div class="table">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Type</th>
+                                                    <th>Mins</th>
+                                                    <th>Liters</th>
+                                                    <th>Options</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="consume-table">
+                                                <!-- 
                                             <tr>
                                                 <td>Shower</td>
                                                 <td>15</td>
                                                 <td>120</td>
                                                 <td>Edit | Delete</td>
                                             </tr>
-                                            -->
-                                        </tbody>
-                                    </table>
+                                            --></tbody>
+                                        </table>
+                                    </div>
+
                                     <div class="data-box__buttons"></div>
                                 </div>
                                 <div class="data-box__chart">

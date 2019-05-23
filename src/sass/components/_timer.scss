@@ -79,16 +79,22 @@
         flex-direction: row;
     }
 
-    &__save {
+    &__timer--save {
         margin-top: 1rem;
         padding: 0.5rem 3rem;
         border-radius: 8px;
     }
-    &__stop {
+    &__timer--stop {
         margin-top: 1rem;
         padding: 0.5rem 3rem;
         border-radius: 8px;
         margin-right: 3px;
+    }
+
+    &__input--save {
+        margin-top: 1rem;
+        padding: 0.5rem 3rem;
+        border-radius: 8px;
     }
 
     &__boxes {

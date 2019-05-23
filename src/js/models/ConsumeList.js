@@ -7,7 +7,7 @@ export default class ConsumeList {
     }
 
     addConsume(consume) {
-        this.list.push(consume);
+        this.list.unshift(consume);
         return consume;
     }
 

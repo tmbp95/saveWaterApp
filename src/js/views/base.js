@@ -19,8 +19,11 @@ export const elements = {
     waterPerMinuteText: document.querySelector('.waterPerMinute'),
     timer: document.querySelector('.timer__auto'),
     timerInputs: document.querySelector('.timer__counter'),
-    stopButton: document.querySelector('.timer__stop'),
-    saveButton: document.querySelector('.timer__save'),
+    stopButton: document.querySelector('.timer__timer--stop'),
+    saveButton: document.querySelector('.timer__timer--save'),
+    saveButton2: document.querySelector('.timer__input--save'),
+    tableDOM: document.querySelector('.table'),
+    showInput: document.querySelector('.showInput'),
     tableButtons: document.querySelector('.data-box__buttons')
 };
 

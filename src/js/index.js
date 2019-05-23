@@ -56,11 +56,11 @@ consume2.calcConsume();
 consume3.calcConsume();
 consume4.calcConsume();
 consume5.calcConsume();
-state.consumes.addConsume(consume5);
-state.consumes.addConsume(consume4);
-state.consumes.addConsume(consume3);
-state.consumes.addConsume(consume2);
 state.consumes.addConsume(consume1);
+state.consumes.addConsume(consume2);
+state.consumes.addConsume(consume3);
+state.consumes.addConsume(consume4);
+state.consumes.addConsume(consume5);
 
 /**
  * MENU CONTROLLER
@@ -265,58 +265,64 @@ const resetTimer = () => {
     firstClick = true;
 };
 
-{
-    // TODOOOOO!!!!
-    const controlInputs = e => {
-        const targetClassList = [...e.target.classList];
-        let newValue = 0;
-        if (targetClassList.includes('btn__add')) {
-            const typeInput = e.target.parentNode.childNodes[3];
-            const typeInputValue = +typeInput.value;
-            newValue = typeInputValue + 1;
+// TODOOOOO!!!!
+const controlInputs = e => {
+    const targetClassList = [...e.target.classList];
+    let newValue = 0;
+    if (targetClassList.includes('btn__add')) {
+        const typeInput = e.target.parentNode.childNodes[3];
+        const typeInputValue = +typeInput.value;
+        newValue = typeInputValue + 1;
 
-            if (parseInt(newValue, 10) < 10) newValue = '0' + newValue;
-            typeInput.value = newValue;
+        if (parseInt(newValue, 10) < 10) newValue = '0' + newValue;
+        typeInput.value = newValue;
+        toggleDisable(typeInput);
+    }
+    if (targetClassList.includes('btn__remove')) {
+        const typeInput = e.target.parentNode.childNodes[3];
+        const typeInputValue = +typeInput.value;
+        newValue = typeInputValue - 1;
+
+        if (parseInt(newValue, 10) < 10) newValue = '0' + newValue;
+        typeInput.value = newValue;
+        toggleDisable(typeInput);
+    }
+};
+
+// TODOOOOO!!!!
+const resetInputs = () => {
+    let timerInputsChilds = elements.timerInputs.childNodes;
+
+    timerInputsChilds.forEach(child => {
+        if (child.classList && child.classList.contains('timer__boxes')) {
+            const typeInput = child.childNodes[3];
+            // Set value of input to 0
+            typeInput.value = '00';
+            // Reset Inputs
             toggleDisable(typeInput);
         }
-        if (targetClassList.includes('btn__remove')) {
-            const typeInput = e.target.parentNode.childNodes[3];
-            const typeInputValue = +typeInput.value;
-            newValue = typeInputValue - 1;
+    });
+};
 
-            if (parseInt(newValue, 10) < 10) newValue = '0' + newValue;
-            typeInput.value = newValue;
-            toggleDisable(typeInput);
-        }
-    };
+// TODOOOOO!!!!
+const toggleDisable = typeInput => {
+    // Set the incremental button and the decremental button
+    const incButton = typeInput.parentNode.childNodes[1];
+    const decButton = typeInput.parentNode.childNodes[7];
 
-    // TODOOOOO!!!!
-    const resetInputs = () => {
-        let timerInputsChilds = elements.timerInputs.childNodes;
+    // If the value of the input is equal to its max then disable the inc button
+    incButton.disabled = +typeInput.value == +typeInput.max;
+    // If the value of the input is equal to its min then disable the dec button
+    decButton.disabled = +typeInput.value == +typeInput.min;
+};
+elements.showInput.addEventListener('click', event => {
+    elements.timerInputs.style.display = 'flex';
+    elements.saveButton2.style.display = 'block';
+    console.log(event.target);
+    const btn = event.target.closest('.showInput');
+    btn.style.display = 'none';
+});
 
-        timerInputsChilds.forEach(child => {
-            if (child.classList && child.classList.contains('timer__boxes')) {
-                const typeInput = child.childNodes[3];
-                // Set value of input to 0
-                typeInput.value = '00';
-                // Reset Inputs
-                toggleDisable(typeInput);
-            }
-        });
-    };
-
-    // TODOOOOO!!!!
-    const toggleDisable = typeInput => {
-        // Set the incremental button and the decremental button
-        const incButton = typeInput.parentNode.childNodes[1];
-        const decButton = typeInput.parentNode.childNodes[7];
-
-        // If the value of the input is equal to its max then disable the inc button
-        incButton.disabled = +typeInput.value == +typeInput.max;
-        // If the value of the input is equal to its min then disable the dec button
-        decButton.disabled = +typeInput.value == +typeInput.min;
-    };
-}
 /**
  * SAVE CONSUMES CONTROLLER
  **/
@@ -349,7 +355,56 @@ const controlSaveConsume = type => {
         clearInterval(timerInterval);
         timerInterval = -1;
         firstClick = true;
+    } else if (type === 'input') {
+        let timerInputsChilds = elements.timerInputs.childNodes;
+        let time = 0;
+        timerInputsChilds.forEach(child => {
+            if (child.classList && child.classList.contains('timer__boxes')) {
+                const typeInput = child.childNodes[3];
+                const typeInputVal = +typeInput.value;
+
+                if (typeInput.dataset.type === 'seconds') {
+                    time += typeInputVal;
+                }
+                console.log(time);
+                if (typeInput.dataset.type === 'minutes') {
+                    time += typeInputVal * 60;
+                }
+                console.log(time);
+                if (typeInput.dataset.type === 'hours') {
+                    time += typeInputVal * 60 * 60;
+                }
+                console.log(time);
+            }
+        });
+
+        // If the consume state is empty, create one
+        if (!state.consumes) state.consumes = new ConsumeList();
+
+        // If there IS water consumption do something
+        if (time > 0) {
+            console.log('Creating consume', { activeItem, nameItem, timeSeconds: time, date: new Date() });
+            const consume = new Consume(activeItem, nameItem, time, new Date());
+            consume.calcConsume();
+            state.consumes.addConsume(consume);
+        }
+        // If there is NO consume
+        else {
+            console.log('Oups, seems like there is no consume!');
+        }
+
+        resetInputs();
+
+        // // Prepare the UI of the timer element to Restart configuration
+        // consumeView.renderTextTimer('restart');
+
+        // // Clear the interval and set Stop
+        // clearInterval(timerInterval);
+        // timerInterval = -1;
+        // firstClick = true;
     }
+
+    console.log(state.consumes);
 };
 
 window.addEventListener('load', () => {
@@ -360,6 +415,7 @@ elements.timerInputs.addEventListener('click', event => controlInputs(event));
 
 elements.saveButton.addEventListener('click', () => controlSaveConsume('timer'));
 elements.stopButton.addEventListener('click', resetTimer);
+elements.saveButton2.addEventListener('click', () => controlSaveConsume('input'));
 
 /**
  * MANAGE CONTROLLER
@@ -477,7 +533,7 @@ const handleInputChange = event => {
     parentRow.childNodes[7].childNodes[0].nodeValue = nFormatter((actualTime / 60) * consumeTypes[type], 1);
 };
 
-function nFormatter(num, digits) {
+const nFormatter = (num, digits) => {
     var si = [{ value: 1, symbol: '' }, { value: 1e3, symbol: 'k' }, { value: 1e6, symbol: 'M' }, { value: 1e9, symbol: 'G' }, { value: 1e12, symbol: 'T' }, { value: 1e15, symbol: 'P' }, { value: 1e18, symbol: 'E' }];
     var rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
     var i;
@@ -487,11 +543,21 @@ function nFormatter(num, digits) {
         }
     }
     return (num / si[i].value).toFixed(digits).replace(rx, '$1') + si[i].symbol;
-}
+};
 
 elements.tableConsumes.addEventListener('click', event => handleTableButtons(event));
 
 elements.tableConsumes.addEventListener('keyup', event => handleInputChange(event));
+
+const handleClickOutside = event => {
+    const isClickInside = elements.tableDOM.contains(event.target);
+
+    if (!isClickInside) {
+        disableAllEdits(elements.tableConsumes);
+    }
+};
+
+document.addEventListener('click', event => handleClickOutside(event));
 
 /**
  * CHART CONTROLLER
