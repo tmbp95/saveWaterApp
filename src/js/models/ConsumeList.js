@@ -16,7 +16,24 @@ export default class ConsumeList {
         this.list.splice(index, 1);
     }
 
-    updateConsume(id, newLiters) {
-        this.list.find(el => el.id === id).liters = newLiters;
+    getTime(id) {
+        const elm = this.list.find(el => el.id === id);
+        return elm.time;
+    }
+
+    getConsume(id) {
+        const elm = this.list.find(el => el.id === id);
+        return elm.liters;
+    }
+
+    getType(id) {
+        const elm = this.list.find(el => el.id === id);
+        return elm.type;
+    }
+
+    updateConsume(id, newTime) {
+        const elm = this.list.find(el => el.id === id);
+        elm.time = newTime;
+        elm.liters = (newTime / 60) * consumeTypes[elm.type];
     }
 }

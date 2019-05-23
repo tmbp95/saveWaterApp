@@ -12,19 +12,31 @@ const renderConsume = consume => {
     const month = dateArray[1];
     const day = dateArray[2];
     const markup = `
-        <tr>
+        <tr id="${consume.id}">
             <td>${month} ${day}</td>
             <td>${consume.typeComplete}</td>
-            <td>${convertToMin(consume.time)}</td>
-            <td>${consume.liters.toFixed(1)}</td>
-            <td>Edit | Delete</td>
+            <td><input class="disabled" type="number" value="${consume.time}" disabled/></td>
+            <td>${nFormatter(consume.liters.toFixed(1), 1)}</td>
+            <td><button data-type="edit">Edit</button> | <button data-type="delete">Delete</button></td>
         </tr>
     `;
     elements.tableConsumes.insertAdjacentHTML('beforeend', markup);
 };
 
+const nFormatter = (num, digits) => {
+    var si = [{ value: 1, symbol: '' }, { value: 1e3, symbol: 'k' }, { value: 1e6, symbol: 'M' }, { value: 1e9, symbol: 'G' }, { value: 1e12, symbol: 'T' }, { value: 1e15, symbol: 'P' }, { value: 1e18, symbol: 'E' }];
+    var rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+    var i;
+    for (i = si.length - 1; i > 0; i--) {
+        if (num >= si[i].value) {
+            break;
+        }
+    }
+    return (num / si[i].value).toFixed(digits).replace(rx, '$1') + si[i].symbol;
+};
+
 // Render all consumes into the table
-export const renderConsumesTable = (consumes, page = 1, resPerPage = 2) => {
+export const renderConsumesTable = (consumes, page = 1, resPerPage = 3) => {
     // render results of current page
     if (consumes.length <= resPerPage) {
         resPerPage = consumes.length;
@@ -68,17 +80,6 @@ const renderButtons = (page, numResults, resPerPage) => {
     }
 
     elements.tableButtons.insertAdjacentHTML('afterbegin', button);
-};
-
-export const renderResults = (recipes, page = 1, resPerPage = 3) => {
-    // render results of current page
-    const start = (page - 1) * resPerPage;
-    const end = page * resPerPage;
-
-    recipes.slice(start, end).forEach(renderRecipe);
-
-    // render pagination buttons
-    renderButtons(page, recipes.length, resPerPage);
 };
 
 // Convertion from seconds to minutes
@@ -172,7 +173,11 @@ export const renderWaterAnimation = percentage => {
 
     // Update the percentage text to the respective value
     const percentageDOM = [...elements.waterAnimationBig.childNodes][1].firstChild;
-    percentageDOM.textContent = percentage.toFixed(0);
+    if (!isNaN(percentage)) {
+        percentageDOM.textContent = percentage.toFixed(0);
+    } else {
+        percentageDOM.textContent = 0;
+    }
 
     // Update the waves DOMs positions usign the Bottom property
     const wavesDOM = [...elements.waterAnimationBig.childNodes].filter(elm => (elm.classList ? elm.classList.contains('wave') : null));

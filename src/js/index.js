@@ -4,7 +4,7 @@ import ConsumeList from './models/ConsumeList';
 
 import * as consumeView from './views/consumeView';
 
-import { elements, renderLoader, clearLoader } from './views/base';
+import { elements, consumeTypes, renderLoader, clearLoader } from './views/base';
 import '../sass/main.scss';
 
 /** Global state of the app
@@ -364,12 +364,12 @@ elements.stopButton.addEventListener('click', resetTimer);
 /**
  * MANAGE CONTROLLER
  **/
-const controlManage = () => {
+const controlManage = (page = 1) => {
     // Render Shadow in the UI
     consumeView.renderShadow();
 
     // Control Toggle to check whether to show Table or Chart
-    controlToggle();
+    controlToggle(page);
 
     // Control WaterPercentage Animation
     controlWaterPercentage();
@@ -378,12 +378,12 @@ const controlManage = () => {
 /**
  * TOGGLE CONTROLLER
  **/
-const controlToggle = () => {
+const controlToggle = (page = 1) => {
     // Get value from checkbox to understand what should it render (table, chart)
     const showElement = elements.toggleButton.checked ? 'chart' : 'table';
 
     // Depending on the showElement value control Table or Chart
-    if (showElement === 'table') controlTable();
+    if (showElement === 'table') controlTable(page);
     else if (showElement === 'chart') controlChart();
 };
 
@@ -395,7 +395,7 @@ elements.toggleButton.addEventListener('change', () => {
 /**
  * TABLE CONTROLLER
  **/
-const controlTable = () => {
+const controlTable = (page = 1) => {
     // Prepare UI for changes
     elements.table.style.display = 'block';
     elements.chart.style.display = 'none';
@@ -404,7 +404,9 @@ const controlTable = () => {
     consumeView.clearConsumesTable();
 
     // Render consumes to table
-    consumeView.renderConsumesTable(state.consumes.list);
+    const goToPage = page;
+    window.page = goToPage;
+    consumeView.renderConsumesTable(state.consumes.list, goToPage);
 };
 
 elements.tableButtons.addEventListener('click', e => {
@@ -413,8 +415,83 @@ elements.tableButtons.addEventListener('click', e => {
         const goToPage = parseInt(btn.dataset.goto, 5);
         consumeView.clearConsumesTable();
         consumeView.renderConsumesTable(state.consumes.list, goToPage);
+        window.page = goToPage;
     }
 });
+
+const handleTableButtons = event => {
+    if (event.target.dataset.type) {
+        const parent = event.target.parentNode.parentNode;
+        const id = event.target.parentNode.parentNode.id;
+        switch (event.target.dataset.type) {
+            case 'edit':
+                disableAllEdits(elements.tableConsumes);
+
+                event.target.childNodes[0].nodeValue = 'Save';
+                event.target.dataset.type = 'save';
+
+                parent.childNodes[5].childNodes[0].disabled = false;
+                parent.childNodes[5].childNodes[0].classList.remove('disabled');
+                parent.childNodes[5].childNodes[0].focus();
+
+                break;
+            case 'delete':
+                state.consumes.deleteConsume(id);
+                controlManage(window.page);
+
+                break;
+            case 'save':
+                const value = parent.childNodes[5].childNodes[0].value;
+                state.consumes.updateConsume(id, value);
+                event.target.childNodes[0].nodeValue = 'Edit';
+                event.target.dataset.type = 'edit';
+
+                parent.childNodes[5].childNodes[0].disabled = true;
+                parent.childNodes[5].childNodes[0].classList.add('disabled');
+                controlManage(window.page);
+
+                break;
+        }
+    }
+};
+
+const disableAllEdits = table => {
+    [...table.childNodes].forEach(child => {
+        const id = child.id;
+        if (!id) return;
+        child.childNodes[9].childNodes[0].childNodes[0].nodeValue = 'Edit';
+        child.childNodes[9].childNodes[0].dataset.type = 'edit';
+        child.childNodes[5].childNodes[0].disabled = true;
+        child.childNodes[5].childNodes[0].value = state.consumes.getTime(id);
+        child.childNodes[5].childNodes[0].classList.add('disabled');
+    });
+};
+
+const handleInputChange = event => {
+    const actualTime = event.target.value;
+    const parentRow = event.target.parentNode.parentNode;
+    const id = parentRow.id;
+    const type = state.consumes.getType(id);
+    console.log(state.consumes.getConsume(id));
+    console.log(parentRow.childNodes[7].childNodes[0].nodeValue);
+    parentRow.childNodes[7].childNodes[0].nodeValue = nFormatter((actualTime / 60) * consumeTypes[type], 1);
+};
+
+function nFormatter(num, digits) {
+    var si = [{ value: 1, symbol: '' }, { value: 1e3, symbol: 'k' }, { value: 1e6, symbol: 'M' }, { value: 1e9, symbol: 'G' }, { value: 1e12, symbol: 'T' }, { value: 1e15, symbol: 'P' }, { value: 1e18, symbol: 'E' }];
+    var rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+    var i;
+    for (i = si.length - 1; i > 0; i--) {
+        if (num >= si[i].value) {
+            break;
+        }
+    }
+    return (num / si[i].value).toFixed(digits).replace(rx, '$1') + si[i].symbol;
+}
+
+elements.tableConsumes.addEventListener('click', event => handleTableButtons(event));
+
+elements.tableConsumes.addEventListener('keyup', event => handleInputChange(event));
 
 /**
  * CHART CONTROLLER

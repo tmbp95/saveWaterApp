@@ -34,6 +34,31 @@
             background-color: $color-primary;
             color: white;
         }
+
+        button {
+            border: 0;
+            background-color: transparent;
+            color: inherit;
+            cursor: pointer;
+
+            &:hover {
+                color: $color-primary;
+            }
+        }
+
+        input {
+            color: inherit;
+            box-sizing: border-box;
+            width: 4.5rem;
+            text-align: right;
+        }
+
+        .disabled {
+            border: 1px solid red;
+            background-color: transparent;
+            color: inherit;
+            text-align: left;
+        }
     }
 
     &__chart {
