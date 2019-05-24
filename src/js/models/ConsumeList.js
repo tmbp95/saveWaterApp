@@ -33,7 +33,13 @@ export default class ConsumeList {
 
     updateConsume(id, newTime) {
         const elm = this.list.find(el => el.id === id);
+        newTime = newTime * 60;
         elm.time = newTime;
         elm.liters = (newTime / 60) * consumeTypes[elm.type];
+        if (isNaN(consumeTypes[elm.type])) {
+            elm.liters = consumeTypes['bath'][elm.type];
+        } else {
+            elm.liters = (newTime / 60) * consumeTypes[elm.type];
+        }
     }
 }

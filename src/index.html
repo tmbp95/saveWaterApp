@@ -52,6 +52,9 @@
                                 <li class="sidebar__item sidebar__item--active" data-itemid="shower">
                                     <img src="img/bathtub-2.png" alt="" class="sidebar__icon sidebar__icon-1" />
                                 </li>
+                                <li class="sidebar__item " data-itemid="bath">
+                                    <img src="img/bath-2.png" alt="" class="sidebar__icon sidebar__icon-3" />
+                                </li>
                                 <li class="sidebar__item " data-itemid="handsWash">
                                     <img src="img/sink-2.png" alt="" class="sidebar__icon sidebar__icon-2" />
                                 </li>
@@ -62,7 +65,7 @@
                         </nav>
                         <div class="water-animation water-animation--small">
                             <h2 class="heading-quad"><span class="water-animation__type">Shower</span><br />something here</h2>
-                            <img src="img/waterTap.png" alt="" class="tapWater" />
+                            <img src="img/waterTap2.png" alt="" class="tapWater" />
 
                             <div class="drops lightblue"></div>
                             <div class="drops lightblue drop2"></div>
@@ -127,8 +130,41 @@
                                     <button class="btn btn__remove">-</button>
                                 </div>
                             </div>
-                            <div class="btn__row" >
+                            <div class="btn__row">
                                 <button class="btn timer__input--save" style="display: none">Save</button>
+                            </div>
+                        </div>
+                        <div class="timer portion">
+                            <div class="timer__arrow"><span>&#10148;</span></div>
+                            <h2 class="heading-tertiary">Select your Bathtub and add your consume:</h2>
+                            <div class="timer__portion">
+                                <div class="timer__option" data-type="small">
+                                    <p class="timer__text timer__text--margin">Small<br />Bathtub</p>
+                                    <p class="timer__info timer__info--margin">140x70cm<br />55x27in</p>
+                                </div>
+                                <div class="timer__option timer__option--active" data-type="medium">
+                                    <p class="timer__text timer__text--margin">Standard<br />Bathtub</p>
+                                    <p class="timer__info timer__info--margin">170x70cm<br />67x27in</p>
+                                </div>
+                                <div class="timer__option" data-type="big">
+                                    <p class="timer__text timer__text--margin">Big<br />Bathtub</p>
+                                    <p class="timer__info timer__info--margin">180x70cm<br />70x27in</p>
+                                </div>
+                            </div>
+                            <div class="btn__row">
+                                <button class="btn timer__portion--save">Add</button>
+                            </div>
+                        </div>
+                        <div class="timer flush">
+                            <div class="timer__arrow"><span>&#10148;</span></div>
+                            <h2 class="heading-tertiary">Select your Bathtub and add your consume:</h2>
+                            <div class="timer__portion">
+                                <div class="timer__option timer__option--active" data-type="medium">
+                                    <p class="timer__text ">Flush<br />Toliet</p>
+                                </div>
+                            </div>
+                            <div class="btn__row">
+                                <button class="btn timer__flush--save">Add</button>
                             </div>
                         </div>
                     </section>

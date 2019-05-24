@@ -18,10 +18,16 @@ export const elements = {
     typeConsumeText: document.querySelector('.water-animation__type'),
     waterPerMinuteText: document.querySelector('.waterPerMinute'),
     timer: document.querySelector('.timer__auto'),
+    timerDOM: document.querySelector('.timer'),
+    portion: document.querySelector('.timer__portion'),
+    portionDOM: document.querySelector('.portion'),
+    flushDOM: document.querySelector('.flush'),
     timerInputs: document.querySelector('.timer__counter'),
     stopButton: document.querySelector('.timer__timer--stop'),
     saveButton: document.querySelector('.timer__timer--save'),
     saveButton2: document.querySelector('.timer__input--save'),
+    saveButton3: document.querySelector('.timer__portion--save'),
+    saveButton4: document.querySelector('.timer__flush--save'),
     tableDOM: document.querySelector('.table'),
     showInput: document.querySelector('.showInput'),
     tableButtons: document.querySelector('.data-box__buttons')
@@ -29,9 +35,16 @@ export const elements = {
 
 export const consumeTypes = {
     shower: 12,
+    bath: {
+        big: 15,
+        medium: 15,
+        small: 15
+    },
     handsWash: 5,
     toiletFlush: 10
 };
+
+export const resPerPage = 3;
 
 export const elementStrings = {
     loader: 'loader'

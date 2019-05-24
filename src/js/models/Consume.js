@@ -13,6 +13,14 @@ export default class Consume {
     // Calc the consumes according to the type and time of the consume
     calcConsume() {
         // Assuming that we consume x Liters per minute of running water
-        this.liters = (this.time / 60) * consumeTypes[this.type];
+        if (isNaN(consumeTypes[this.type])) {
+            this.liters = consumeTypes['bath'][this.type];
+        } else {
+            if (isNaN(this.time)) {
+                this.liters = consumeTypes[this.type];
+            } else {
+                this.liters = (this.time / 60) * consumeTypes[this.type];
+            }
+        }
     }
 }

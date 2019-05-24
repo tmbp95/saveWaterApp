@@ -1,4 +1,4 @@
-import { elements, consumeTypes } from './base';
+import { elements, consumeTypes, resPerPage } from './base';
 
 // Clean up all entries of the table
 export const clearConsumesTable = () => {
@@ -11,13 +11,15 @@ const renderConsume = consume => {
     const dateArray = consume.date.toString().split(' ');
     const month = dateArray[1];
     const day = dateArray[2];
+    const time = isNaN(convertToMin(consume.time)) ? '<td>∞</td>' : `<td><input class="disabled" type="number" value="${convertToMin(consume.time)}" disabled/></td>`;
+    const buttons = isNaN(convertToMin(consume.time)) ? '<td><button data-type="delete">Delete</button></td>' : `<td><button data-type="edit">Edit</button> | <button data-type="delete">Delete</button></td>`;
     const markup = `
         <tr id="${consume.id}">
             <td>${month} ${day}</td>
             <td>${consume.typeComplete}</td>
-            <td><input class="disabled" type="number" value="${consume.time}" disabled/></td>
+            ${time}
             <td>${nFormatter(consume.liters.toFixed(1), 1)}</td>
-            <td><button data-type="edit">Edit</button> | <button data-type="delete">Delete</button></td>
+            ${buttons}
         </tr>
     `;
     elements.tableConsumes.insertAdjacentHTML('beforeend', markup);
@@ -32,7 +34,11 @@ const nFormatter = (num, digits) => {
             break;
         }
     }
-    return (num / si[i].value).toFixed(digits).replace(rx, '$1') + si[i].symbol;
+    if (num >= si[si.length - 1].value) {
+        return '∞';
+    } else {
+        return (num / si[i].value).toFixed(digits).replace(rx, '$1') + si[i].symbol;
+    }
 };
 
 // Render all consumes into the table
@@ -169,6 +175,8 @@ export const renderWaterAnimation = percentage => {
     // Create an alert type of text when the limit is reached
     if (percentage > 100) {
         textPercentage.classList.add('info__text--big-alert');
+    } else {
+        textPercentage.classList.remove('info__text--big-alert');
     }
 
     // Update the percentage text to the respective value
@@ -191,12 +199,17 @@ export const renderWaterAnimation = percentage => {
     }
 };
 
-export const renderTextInfo = (activeItem, nameItem) => {
+export const renderTextInfo = (activeItem, nameItem, type = 'medium') => {
     // Change the UI text with the new type of consume
     elements.typeConsumeText.textContent = nameItem;
 
     // Change the UI text with the amount of liters per minute
-    elements.waterPerMinuteText.textContent = consumeTypes[activeItem];
+    if (typeof consumeTypes[activeItem] != 'number') {
+        console.log(consumeTypes[activeItem][type]);
+        elements.waterPerMinuteText.textContent = consumeTypes[activeItem][type];
+    } else {
+        elements.waterPerMinuteText.textContent = consumeTypes[activeItem];
+    }
 };
 
 export const renderTextTimer = type => {

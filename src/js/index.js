@@ -4,7 +4,7 @@ import ConsumeList from './models/ConsumeList';
 
 import * as consumeView from './views/consumeView';
 
-import { elements, consumeTypes, renderLoader, clearLoader } from './views/base';
+import { elements, consumeTypes, resPerPage, renderLoader, clearLoader } from './views/base';
 import '../sass/main.scss';
 
 /** Global state of the app
@@ -12,7 +12,9 @@ import '../sass/main.scss';
  * - ListConsume objec
  * - Time object
  */
-const state = {};
+const state = {
+    bathTub: 'medium'
+};
 
 // const consumeObj = {
 //     type: 'shower',
@@ -143,7 +145,26 @@ const controlSidebar = () => {
     }, null);
 
     // Depending on the active's sidebar item, create the full name type of consume
-    const nameItem = getItemName(activeItem.dataset.itemid);
+    const itemID = activeItem.dataset.itemid;
+    const nameItem = getItemName(itemID);
+
+    // Change The Timer Inputs
+    if (itemID == 'bath') {
+        elements.timerDOM.style.display = 'none';
+        elements.flushDOM.style.display = 'none';
+
+        elements.portionDOM.style.display = 'flex';
+    } else if (itemID == 'toiletFlush') {
+        elements.portionDOM.style.display = 'none';
+        elements.timerDOM.style.display = 'none';
+
+        elements.flushDOM.style.display = 'flex';
+    } else {
+        elements.portionDOM.style.display = 'none';
+        elements.flushDOM.style.display = 'none';
+
+        elements.timerDOM.style.display = 'flex';
+    }
 
     // Return both activeItem and the full name of the type of consume
     return [activeItem, nameItem];
@@ -175,6 +196,24 @@ elements.typeConsume.addEventListener('click', e => {
 
     // Render UI text about type of consume and liters per minute
     consumeView.renderTextInfo(itemID, nameItem);
+
+    // Change The Timer Inputs
+    if (itemID == 'bath') {
+        elements.timerDOM.style.display = 'none';
+        elements.flushDOM.style.display = 'none';
+
+        elements.portionDOM.style.display = 'flex';
+    } else if (itemID == 'toiletFlush') {
+        elements.portionDOM.style.display = 'none';
+        elements.timerDOM.style.display = 'none';
+
+        elements.flushDOM.style.display = 'flex';
+    } else {
+        elements.portionDOM.style.display = 'none';
+        elements.flushDOM.style.display = 'none';
+
+        elements.timerDOM.style.display = 'flex';
+    }
 });
 
 // Get Item Name from the itemID (shower = Shower, handsWash = Hands Wash, etc.)
@@ -182,6 +221,8 @@ const getItemName = itemID => {
     switch (itemID) {
         case 'shower':
             return 'Shower';
+        case 'bath':
+            return 'Bath';
         case 'handsWash':
             return 'Hands Wash';
         case 'toiletFlush':
@@ -323,6 +364,22 @@ elements.showInput.addEventListener('click', event => {
     btn.style.display = 'none';
 });
 
+elements.portion.addEventListener('click', event => changeBathTub(event));
+
+const changeBathTub = event => {
+    const btn = event.target.closest('.timer__option');
+    if (btn.dataset.type) {
+        [...elements.portion.childNodes].forEach(child => {
+            if (child.dataset && child.dataset.type) {
+                child.classList.remove('timer__option--active');
+            }
+        });
+        btn.classList.add('timer__option--active');
+        state.bathTub = btn.dataset.type;
+        console.log(state.bathTub);
+    }
+};
+
 /**
  * SAVE CONSUMES CONTROLLER
  **/
@@ -402,6 +459,16 @@ const controlSaveConsume = type => {
         // clearInterval(timerInterval);
         // timerInterval = -1;
         // firstClick = true;
+    } else if (type === 'portion') {
+        console.log('Creating consume', { activeItem: activeItem + ':' + state.bathTub, nameItem, timeSeconds: '∞', date: new Date() });
+        const consume = new Consume(state.bathTub, nameItem, '∞', new Date());
+        consume.calcConsume();
+        state.consumes.addConsume(consume);
+    } else if (type === 'flush') {
+        console.log('Creating consume', { activeItem, nameItem, timeSeconds: '∞', date: new Date() });
+        const consume = new Consume(activeItem, nameItem, '∞', new Date());
+        consume.calcConsume();
+        state.consumes.addConsume(consume);
     }
 
     console.log(state.consumes);
@@ -416,6 +483,8 @@ elements.timerInputs.addEventListener('click', event => controlInputs(event));
 elements.saveButton.addEventListener('click', () => controlSaveConsume('timer'));
 elements.stopButton.addEventListener('click', resetTimer);
 elements.saveButton2.addEventListener('click', () => controlSaveConsume('input'));
+elements.saveButton3.addEventListener('click', () => controlSaveConsume('portion'));
+elements.saveButton4.addEventListener('click', () => controlSaveConsume('flush'));
 
 /**
  * MANAGE CONTROLLER
@@ -461,8 +530,8 @@ const controlTable = (page = 1) => {
 
     // Render consumes to table
     const goToPage = page;
-    window.page = goToPage;
-    consumeView.renderConsumesTable(state.consumes.list, goToPage);
+    state.page = goToPage;
+    consumeView.renderConsumesTable(state.consumes.list, goToPage, resPerPage);
 };
 
 elements.tableButtons.addEventListener('click', e => {
@@ -470,8 +539,8 @@ elements.tableButtons.addEventListener('click', e => {
     if (btn) {
         const goToPage = parseInt(btn.dataset.goto, 5);
         consumeView.clearConsumesTable();
-        consumeView.renderConsumesTable(state.consumes.list, goToPage);
-        window.page = goToPage;
+        consumeView.renderConsumesTable(state.consumes.list, goToPage, resPerPage);
+        state.page = goToPage;
     }
 });
 
@@ -493,7 +562,12 @@ const handleTableButtons = event => {
                 break;
             case 'delete':
                 state.consumes.deleteConsume(id);
-                controlManage(window.page);
+                if (state.consumes.list.length - 1 < resPerPage && state.page > 1) {
+                    controlManage(state.page - 1);
+                    console.log('hi');
+                } else {
+                    controlManage(state.page);
+                }
 
                 break;
             case 'save':
@@ -504,7 +578,7 @@ const handleTableButtons = event => {
 
                 parent.childNodes[5].childNodes[0].disabled = true;
                 parent.childNodes[5].childNodes[0].classList.add('disabled');
-                controlManage(window.page);
+                controlManage(state.page);
 
                 break;
         }
@@ -515,22 +589,35 @@ const disableAllEdits = table => {
     [...table.childNodes].forEach(child => {
         const id = child.id;
         if (!id) return;
+        if (child.childNodes[9].childNodes[0].dataset.type != 'edit' && child.childNodes[9].childNodes[0].dataset.type != 'save') return;
         child.childNodes[9].childNodes[0].childNodes[0].nodeValue = 'Edit';
         child.childNodes[9].childNodes[0].dataset.type = 'edit';
         child.childNodes[5].childNodes[0].disabled = true;
-        child.childNodes[5].childNodes[0].value = state.consumes.getTime(id);
+        child.childNodes[5].childNodes[0].value = convertToMin(state.consumes.getTime(id));
         child.childNodes[5].childNodes[0].classList.add('disabled');
+        const type = state.consumes.getType(id);
+        child.childNodes[7].childNodes[0].nodeValue = nFormatter(convertToMin(state.consumes.getTime(id)) * consumeTypes[type], 1);
     });
 };
 
+const convertToMin = seconds => {
+    return (seconds / 60).toFixed(2);
+};
+
 const handleInputChange = event => {
+    if (event.keyCode == '13') {
+        const saveButton = document.querySelector("[data-type='save']");
+        saveButton.click();
+    }
     const actualTime = event.target.value;
     const parentRow = event.target.parentNode.parentNode;
     const id = parentRow.id;
     const type = state.consumes.getType(id);
-    console.log(state.consumes.getConsume(id));
-    console.log(parentRow.childNodes[7].childNodes[0].nodeValue);
-    parentRow.childNodes[7].childNodes[0].nodeValue = nFormatter((actualTime / 60) * consumeTypes[type], 1);
+    if (isNaN(consumeTypes[type])) {
+        parentRow.childNodes[7].childNodes[0].nodeValue = nFormatter(consumeTypes['bath'][type], 1);
+    } else {
+        parentRow.childNodes[7].childNodes[0].nodeValue = nFormatter(actualTime * consumeTypes[type], 1);
+    }
 };
 
 const nFormatter = (num, digits) => {
@@ -542,7 +629,11 @@ const nFormatter = (num, digits) => {
             break;
         }
     }
-    return (num / si[i].value).toFixed(digits).replace(rx, '$1') + si[i].symbol;
+    if (num >= si[si.length - 1].value) {
+        return '∞';
+    } else {
+        return (num / si[i].value).toFixed(digits).replace(rx, '$1') + si[i].symbol;
+    }
 };
 
 elements.tableConsumes.addEventListener('click', event => handleTableButtons(event));
