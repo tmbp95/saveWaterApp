@@ -1,4 +1,4 @@
-import { elements, consumeTypes, resPerPage } from './base';
+import { elements, consumeTypes } from './base';
 
 // Clean up all entries of the table
 export const clearConsumesTable = () => {
@@ -8,50 +8,73 @@ export const clearConsumesTable = () => {
 
 // Render each consume using a markup
 const renderConsume = consume => {
+    // create a new Date object with the date from the consume
     const date = new Date(consume.date);
+    // Split the date to have an array of strings from the date
     const dateArray = date.toString().split(' ');
-    const month = dateArray[1];
+    // Get the month with only 3 chars from the array
+    const month = dateArray[1].substr(0, 3);
+    // Get the day from the array
     const day = dateArray[2];
-    const time = isNaN(convertToMin(consume.time)) ? '<td>∞</td>' : `<td><input class="disabled" type="number" value="${convertToMin(consume.time)}" disabled/></td>`;
-    const buttons = isNaN(convertToMin(consume.time)) ? '<td><button data-type="delete">Delete</button></td>' : `<td><button data-type="edit">Edit</button> | <button data-type="delete">Delete</button></td>`;
+    // Get the liters and convert it to a fixed and formatted number
+    const liters = nFormatter(consume.liters.toFixed(1), 1);
+    // If the consume has a time convert it to minutes otherwise write ∞
+    const time = isNaN(convertToMin(consume.time)) ? '∞' : `<input class="disabled" type="number" value="${convertToMin(consume.time)}" disabled/>`;
+    // If the consume has a time create the EDIT button otherwise no
+    const buttons = isNaN(convertToMin(consume.time)) ? '<button data-type="delete">Delete</button>' : `<button data-type="edit">Edit</button> | <button data-type="delete">Delete</button>`;
     const markup = `
-        <tr id="${consume.id}">
-            <td>${month} ${day}</td>
-            <td>${consume.typeComplete}</td>
-            ${time}
-            <td>${nFormatter(consume.liters.toFixed(1), 1)}</td>
-            ${buttons}
-        </tr>
-        
-    `;
+            <tr id="${consume.id}">
+                <td>${month} ${day}</td>
+                <td>${consume.typeComplete}</td>
+                <td>${time}</td>
+                <td>${liters}</td>
+                <td>${buttons}</td>
+            </tr>
+            
+        `;
     elements.tableConsumes.insertAdjacentHTML('beforeend', markup);
 };
 
+// Render the liters into the consume row from table while updating the mins value
+export const setLitersIntoTableRow = (child, time = 1, type) => {
+    child.childNodes[7].childNodes[0].nodeValue = nFormatter(convertToMin(time) * consumeTypes[type], 1);
+};
+
+// Format the number to use k, M, G, T, P ... instead of having a lot of zeros
+// You can find a similar approach in stackOverFlow
 const nFormatter = (num, digits) => {
-    var si = [{ value: 1, symbol: '' }, { value: 1e3, symbol: 'k' }, { value: 1e6, symbol: 'M' }, { value: 1e9, symbol: 'G' }, { value: 1e12, symbol: 'T' }, { value: 1e15, symbol: 'P' }, { value: 1e18, symbol: 'E' }];
-    var rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-    var i;
+    const si = [{ value: 1, symbol: '' }, { value: 1e3, symbol: 'k' }, { value: 1e6, symbol: 'M' }, { value: 1e9, symbol: 'G' }, { value: 1e12, symbol: 'T' }, { value: 1e15, symbol: 'P' }, { value: 1e18, symbol: 'E' }];
+    const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+    let i;
     for (i = si.length - 1; i > 0; i--) {
         if (num >= si[i].value) {
             break;
         }
     }
+    // If the number is too big >= 1e18, then use the number must be ∞
     if (num >= si[si.length - 1].value) {
         return '∞';
-    } else {
+    }
+    // If the number is normal < 1e18, then just use the normal si replacer
+    else {
         return (num / si[i].value).toFixed(digits).replace(rx, '$1') + si[i].symbol;
     }
 };
 
 // Render all consumes into the table
-export const renderConsumesTable = (consumes, page = 1, resPerPage = 3) => {
+export const renderConsumesTable = (consumes, page = 1, resPerPage = 7) => {
     // render results of current page
+
+    // If the consumes length is inferior to the number of results per page
     if (consumes.length <= resPerPage) {
         resPerPage = consumes.length;
     }
+    // e.g. (1-1) * 7 = 0 => start = 0 | (2-1) * 7 = 0 => start = 7
     const start = (page - 1) * resPerPage;
+    // e.g. 1 * 7 = 7 => end = 7 | 2 * 7 = 14 => end = 14
     const end = page * resPerPage;
 
+    // slice the consumes array to render the respective start - end consumes
     consumes.slice(start, end).forEach(renderConsume);
 
     // render pagination buttons
@@ -68,22 +91,32 @@ const createButton = (page, type) => `
         </button>
     `;
 
+// Render the buttons
 const renderButtons = (page, numResults, resPerPage) => {
+    // Number of pages = number of results / number of results per page
     const pages = Math.ceil(numResults / resPerPage);
     let button;
+    // If actual page is 1 and there are more pages
     if (page === 1 && pages > 1) {
-        // button to go to next page~
+        // create button to go to next page
         button = createButton(page, 'next');
-    } else if (page < pages) {
-        // both buttons
+    }
+    // If actual page > 1 and < number of pages
+    else if (page < pages) {
+        // create both buttons to next and prev pages
         button = `
             ${createButton(page, 'prev')}
             ${createButton(page, 'next')}
         `;
-    } else if (page === pages && pages > 1) {
-        // only button to go prev page
+    }
+    // If actual page > 1 and = number of pages
+    else if (page === pages && pages > 1) {
+        // render button to go prev page
         button = createButton(page, 'prev');
-    } else {
+    }
+    // If actual page is 1 and there is only 1 page
+    else {
+        // DONT render buttons
         button = '';
     }
 
@@ -201,9 +234,12 @@ export const renderWaterAnimation = percentage => {
     }
 };
 
+// Render the text information into the information on Add Consume section
 export const renderTextInfo = (activeItem, nameItem, type = 'medium') => {
     // Change the UI text with the new type of consume
     elements.typeConsumeText.textContent = nameItem;
+
+    // Change the UI secondary-text with the information suggestion of the type of consume
     let text;
     if (activeItem === 'shower') {
         text = 'Turn off the tap while soaping';
@@ -216,15 +252,17 @@ export const renderTextInfo = (activeItem, nameItem, type = 'medium') => {
     }
     elements.typeConsumeDescription.textContent = text;
 
-    // Change the UI text with the amount of liters per minute
+    // If the consumeType is a child of 'bath' => bath: { small: value , medium: value, big: value}
     if (typeof consumeTypes[activeItem] != 'number') {
-        console.log(consumeTypes[activeItem][type]);
+        // Change the UI text with the amount of liters per minute => consumeTypes['bath'][type]
         elements.waterPerMinuteText.textContent = consumeTypes[activeItem][type];
     } else {
+        // Change the UI text with the amount of liters per minute => consumeTypes[activeItem]
         elements.waterPerMinuteText.textContent = consumeTypes[activeItem];
     }
 };
 
+// Render the text from the timer component in Add Consume Section
 export const renderTextTimer = type => {
     if (type === 'pause') {
         // Change the UI of the timer element
@@ -252,6 +290,7 @@ export const renderTextTimer = type => {
 const secondsInADay = 60 * 60 * 24;
 const secondsInAHour = 60 * 60;
 
+// Render the numbers from the timer componenet in Add Consume Section
 export const renderTimeTimer = time => {
     // From the time variable check the amount of hours
     let hours = Math.floor(((time % secondsInADay) / secondsInAHour) * 1);
@@ -268,9 +307,36 @@ export const renderTimeTimer = time => {
     elements.timer.childNodes[1].textContent = `${hours}:${mins}:${secs}`;
 };
 
+// Reset the resulting messages from error or success on adding a consume
+export const resetResultMessages = () => {
+    [...elements.successMessage, ...elements.errorMessage].forEach(elm => {
+        elm.style.opacity = 0;
+        elm.style.display = 'none';
+    });
+};
+
+// Render the resulting messages from error or success on adding a consume
+export const renderMessageResult = elementMessage => {
+    elementMessage.style.display = 'block';
+    elementMessage.style.opacity = '1';
+};
+
+// Render the clicked bathtub type on the UI
+export const renderBathtubType = btn => {
+    [...elements.portion.childNodes].forEach(child => {
+        if (child.dataset && child.dataset.type) {
+            child.classList.remove('timer__option--active');
+        }
+    });
+    btn.classList.add('timer__option--active');
+};
+
+// Render UI shadow on the sidebar menu
 export const renderShadow = () => {
     elements.contentLeft.classList.add('content__left--shadow');
 };
+
+// Remove UI shadow on the sidebar menu
 
 export const removeShadow = () => {
     elements.contentLeft.classList.remove('content__left--shadow');

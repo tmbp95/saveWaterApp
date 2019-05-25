@@ -4,7 +4,7 @@ import ConsumeList from './models/ConsumeList';
 
 import * as consumeView from './views/consumeView';
 
-import { elements, consumeTypes, resPerPage, renderLoader, clearLoader } from './views/base';
+import { elements, consumeTypes, resPerPage } from './views/base';
 import '../sass/main.scss';
 
 /** Global state of the app
@@ -20,16 +20,6 @@ const state = {
 //     type: 'shower',
 //     time: 10,
 //     date: new Date()
-// };
-
-// const weekAmount = {
-//     Monday: 0,
-//     Tuesday: 0,
-//     Wednesday: 0,
-//     Thursday: 0,
-//     Friday: 0,
-//     Saturday: 0,
-//     Sunday: 0
 // };
 
 /**
@@ -51,11 +41,11 @@ if (!storage) {
     const date4 = new Date();
     date4.setDate(date4.getDate() - 1);
 
-    const consume1 = new Consume('shower', 'Shower', 800, date1);
+    const consume1 = new Consume('shower', 'Shower', 650, date1);
     const consume2 = new Consume('shower', 'Shower', 600, date2);
-    const consume3 = new Consume('shower', 'Shower', 800, date3);
-    const consume4 = new Consume('shower', 'Shower', 700, date4);
-    const consume5 = new Consume('shower', 'Shower', 600, new Date());
+    const consume3 = new Consume('shower', 'Shower', 500, date3);
+    const consume4 = new Consume('shower', 'Shower', 550, date4);
+    const consume5 = new Consume('handsWash', 'Hands Wash', 20, new Date());
     consume1.calcConsume();
     consume2.calcConsume();
     consume3.calcConsume();
@@ -89,12 +79,13 @@ const controlMenu = () => {
     // Control Section
     controlSection(menuOption);
 };
+
 // The Beginning of the Controllers
 ['hashchange', 'load'].forEach(event => {
     window.addEventListener(event, controlMenu);
     if (!state.consumes) state.consumes = new ConsumeList();
 
-    // Restore likes
+    // Restore consumes from LocalStorage
     state.consumes.readStorage();
 });
 
@@ -136,14 +127,10 @@ const controlAddConsume = () => {
     // Render UI text about type of consume and liters per minute
     consumeView.renderTextInfo(activeItem.dataset.itemid, nameItem);
 
-    // Control Timer to get user input
-    // controlTimer();
+    // Reset all the messages from the UI (success and error)
+    consumeView.resetResultMessages();
 
-    [...elements.successMessage, ...elements.errorMessage].forEach(elm => {
-        elm.style.opacity = 0;
-        elm.style.display = 'none';
-    });
-
+    // Reset Timer and Inputs
     resetTimer();
     resetInputs();
 };
@@ -166,7 +153,7 @@ const controlSidebar = () => {
     const itemID = activeItem.dataset.itemid;
     const nameItem = getItemName(itemID);
 
-    // Change The Timer Inputs
+    // Change The Timer options of inputs to add a new consume
     if (itemID == 'bath') {
         elements.timerDOM.style.display = 'none';
         elements.flushDOM.style.display = 'none';
@@ -260,11 +247,11 @@ let firstClick = true;
 // Set the interval to -1 meaning there is no pause
 let timerInterval = -1;
 
+// On Click on timer componenet do something
 elements.timer.addEventListener('click', () => {
-    [...elements.successMessage, ...elements.errorMessage].forEach(elm => {
-        elm.style.opacity = 0;
-        elm.style.display = 'none';
-    });
+    // Reset all the messages from the UI (success and error)
+    consumeView.resetResultMessages();
+
     // If it IS the first time the user clicks do something
     if (firstClick) {
         // Reset the Timer to inital configuration
@@ -301,6 +288,7 @@ elements.timer.addEventListener('click', () => {
     }
 });
 
+// SetInterval with cycles of X milliseconds (1000)
 const timerIntervalCounter = milliseconds => {
     const interval = setInterval(function() {
         // Adds 1 second every second
@@ -310,10 +298,11 @@ const timerIntervalCounter = milliseconds => {
         consumeView.renderTimeTimer(state.time);
     }, milliseconds);
 
-    // Reteurn the interval ID
+    // Return the interval ID
     return interval;
 };
 
+// Reset the Timer UI
 const resetTimer = () => {
     // Reset value of timer
     elements.timer.childNodes[1].textContent = `00:00:00`;
@@ -322,10 +311,8 @@ const resetTimer = () => {
     // Prepare the UI of the timer element to Start configuration
     consumeView.renderTextTimer('start');
 
-    [...elements.successMessage, ...elements.errorMessage].forEach(elm => {
-        elm.style.opacity = 0;
-        elm.style.display = 'none';
-    });
+    // Reset all the messages from the UI (success and error)
+    consumeView.resetResultMessages();
 
     // Clear the interval and set pause
     clearInterval(timerInterval);
@@ -333,17 +320,15 @@ const resetTimer = () => {
     firstClick = true;
 };
 
-// TODOOOOO!!!!
-const controlInputs = e => {
-    [...elements.successMessage, ...elements.errorMessage].forEach(elm => {
-        elm.style.opacity = 0;
-        elm.style.display = 'none';
-    });
+// Control the Inputs when the user clicks the increment or decrement buttons
+const controlInputs = event => {
+    // Reset all the messages from the UI (success and error)
+    consumeView.resetResultMessages();
 
-    const targetClassList = [...e.target.classList];
+    const targetClassList = [...event.target.classList];
     let newValue = 0;
     if (targetClassList.includes('btn__add')) {
-        const typeInput = e.target.parentNode.childNodes[3];
+        const typeInput = event.target.parentNode.childNodes[3];
         const typeInputValue = +typeInput.value;
         newValue = typeInputValue + 1;
 
@@ -352,7 +337,7 @@ const controlInputs = e => {
         toggleDisable(typeInput);
     }
     if (targetClassList.includes('btn__remove')) {
-        const typeInput = e.target.parentNode.childNodes[3];
+        const typeInput = event.target.parentNode.childNodes[3];
         const typeInputValue = +typeInput.value;
         newValue = typeInputValue - 1;
 
@@ -362,7 +347,7 @@ const controlInputs = e => {
     }
 };
 
-// TODOOOOO!!!!
+// Reset the Inputs from the Timer UI
 const resetInputs = () => {
     let timerInputsChilds = elements.timerInputs.childNodes;
 
@@ -377,7 +362,7 @@ const resetInputs = () => {
     });
 };
 
-// TODOOOOO!!!!
+// Toggle the increment and decrement buttons depending on the max and min values of the inputs
 const toggleDisable = typeInput => {
     // Set the incremental button and the decremental button
     const incButton = typeInput.parentNode.childNodes[1];
@@ -389,37 +374,41 @@ const toggleDisable = typeInput => {
     decButton.disabled = +typeInput.value == +typeInput.min;
 };
 
+// On Click on "click here to insert your own value" text, show Inputs from Timer UI
 elements.showInput.addEventListener('click', event => {
+    // render the inputs on the UI
     elements.timerInputs.style.display = 'flex';
+    // render the save button on the UI
     elements.saveButton2.style.display = 'block';
-    console.log(event.target);
-    const btn = event.target.closest('.showInput');
-    btn.style.display = 'none';
 
-    [...elements.successMessage, ...elements.errorMessage].forEach(elm => {
-        elm.style.opacity = 0;
-        elm.style.display = 'none';
-    });
+    // remove the clicked text from the UI
+    elements.showInput.style.display = 'none';
+
+    // Reset all the messages from the UI (success and error)
+    consumeView.resetResultMessages();
 });
 
+// On Click on a different bathtub size do something
 elements.portion.addEventListener('click', event => changeBathTub(event));
 
+// Change the BathTub will trigger a state change
 const changeBathTub = event => {
-    [...elements.successMessage, ...elements.errorMessage].forEach(elm => {
-        elm.style.opacity = 0;
-        elm.style.display = 'none';
-    });
+    // Reset all the messages from the UI (success and error)
+    consumeView.resetResultMessages();
 
+    // Get the bathtub type that was clicked
     const btn = event.target.closest('.timer__option');
+
+    // If the clicked target has a dataset-type (small, medium, big)
     if (btn.dataset.type) {
-        [...elements.portion.childNodes].forEach(child => {
-            if (child.dataset && child.dataset.type) {
-                child.classList.remove('timer__option--active');
-            }
-        });
-        btn.classList.add('timer__option--active');
+        // Prepare the UI bathtubType for changes
+        consumeView.renderBathtubType(btn);
+
+        // Change the state bathTub to the actual clicked one
         state.bathTub = btn.dataset.type;
-        console.log(state.bathTub);
+
+        // Render UI text about type of consume and liters per minute
+        consumeView.renderTextInfo('bath', 'Bath', state.bathTub);
     }
 };
 
@@ -427,16 +416,14 @@ const changeBathTub = event => {
  * SAVE CONSUMES CONTROLLER
  **/
 const controlSaveConsume = type => {
-    [...elements.successMessage, ...elements.errorMessage].forEach(elm => {
-        elm.style.opacity = 0;
-        elm.style.display = 'none';
-    });
+    // Reset all the messages from the UI (success and error)
+    consumeView.resetResultMessages();
 
     // Pick the active item from the sidebar
     let [activeItem, nameItem] = controlSidebar();
     activeItem = activeItem.dataset.itemid;
 
-    // if the save button was from the timer... TODO
+    // If the save button was from the Timer
     if (type === 'timer') {
         // If there IS water consumption do something
         if (state.time > 0) {
@@ -444,14 +431,14 @@ const controlSaveConsume = type => {
             const consume = new Consume(activeItem, nameItem, state.time, new Date());
             consume.calcConsume();
             state.consumes.addConsume(consume);
-            elements.saveButton.parentNode.nextElementSibling.firstElementChild.style.display = 'block';
-            elements.saveButton.parentNode.nextElementSibling.firstElementChild.style.opacity = '1';
+            // Render the Success message on the UI
+            consumeView.renderMessageResult(elements.saveButton.parentNode.nextElementSibling.firstElementChild);
         }
         // If there is NO consume
         else {
             console.log('Oups, seems like there is no consume!');
-            elements.saveButton.parentNode.nextElementSibling.lastElementChild.style.display = 'block';
-            elements.saveButton.parentNode.nextElementSibling.lastElementChild.style.opacity = '1';
+            // Render the Error message on the UI
+            consumeView.renderMessageResult(elements.saveButton.parentNode.nextElementSibling.lastElementChild);
         }
 
         // Prepare the UI of the timer element to Restart configuration
@@ -461,26 +448,29 @@ const controlSaveConsume = type => {
         clearInterval(timerInterval);
         timerInterval = -1;
         firstClick = true;
-    } else if (type === 'input') {
+    }
+    // If the save button was from the Inputs
+    else if (type === 'input') {
         let timerInputsChilds = elements.timerInputs.childNodes;
         let time = 0;
+        // For each input from the Timer
         timerInputsChilds.forEach(child => {
             if (child.classList && child.classList.contains('timer__boxes')) {
                 const typeInput = child.childNodes[3];
                 const typeInputVal = +typeInput.value;
 
+                // If the input is for seconds sum the seconds to the total
                 if (typeInput.dataset.type === 'seconds') {
                     time += typeInputVal;
                 }
-                console.log(time);
+                // If the input is for seconds sum the minutes to the total
                 if (typeInput.dataset.type === 'minutes') {
                     time += typeInputVal * 60;
                 }
-                console.log(time);
+                // If the input is for seconds sum the hours to the total
                 if (typeInput.dataset.type === 'hours') {
                     time += typeInputVal * 60 * 60;
                 }
-                console.log(time);
             }
         });
 
@@ -490,53 +480,45 @@ const controlSaveConsume = type => {
             const consume = new Consume(activeItem, nameItem, time, new Date());
             consume.calcConsume();
             state.consumes.addConsume(consume);
-            elements.saveButton2.parentNode.nextElementSibling.style.display = 'block';
-            console.log(elements.saveButton2.parentNode.nextElementSibling.style.display);
-            elements.saveButton2.parentNode.nextElementSibling.style.opacity = '1';
+            // Render the Success message on the UI
+            consumeView.renderMessageResult(elements.saveButton2.parentNode.nextElementSibling);
         }
         // If there is NO consume
         else {
             console.log('Oups, seems like there is no consume!');
-            elements.saveButton2.parentNode.parentNode.lastElementChild.style.display = 'block';
-            elements.saveButton2.parentNode.parentNode.lastElementChild.style.opacity = '1';
+            // Render the Error message on the UI
+            consumeView.renderMessageResult(elements.saveButton2.parentNode.parentNode.lastElementChild);
         }
 
+        // Reset the Inputs from Timer
         resetInputs();
-
-        // // Prepare the UI of the timer element to Restart configuration
-        // consumeView.renderTextTimer('restart');
-
-        // // Clear the interval and set Stop
-        // clearInterval(timerInterval);
-        // timerInterval = -1;
-        // firstClick = true;
-    } else if (type === 'portion') {
+    }
+    // If the save button was from the portion (bath)
+    else if (type === 'portion') {
         console.log('Creating consume', { activeItem: activeItem + ':' + state.bathTub, nameItem, timeSeconds: '∞', date: new Date() });
         const consume = new Consume(state.bathTub, nameItem, '∞', new Date());
         consume.calcConsume();
         state.consumes.addConsume(consume);
-        elements.saveButton3.parentNode.nextElementSibling.style.display = 'block';
-        elements.saveButton3.parentNode.nextElementSibling.style.opacity = '1';
-    } else if (type === 'flush') {
+        // Render the Success message on the UI
+        consumeView.renderMessageResult(elements.saveButton3.parentNode.nextElementSibling);
+    }
+    // If the save button was from the flush (toiletFlush)
+    else if (type === 'flush') {
         console.log('Creating consume', { activeItem, nameItem, timeSeconds: '∞', date: new Date() });
         const consume = new Consume(activeItem, nameItem, '∞', new Date());
         consume.calcConsume();
         state.consumes.addConsume(consume);
-        elements.saveButton4.parentNode.nextElementSibling.style.display = 'block';
-        elements.saveButton4.parentNode.nextElementSibling.style.opacity = '1';
+        // Render the Success message on the UI
+        consumeView.renderMessageResult(elements.saveButton4.parentNode.nextElementSibling);
     }
-
-    console.log(state.consumes);
 };
 
-window.addEventListener('load', () => {
-    // resetInputs();
-    resetTimer();
-});
+// On Click on each input from the Timer
 elements.timerInputs.addEventListener('click', event => controlInputs(event));
 
-elements.saveButton.addEventListener('click', () => controlSaveConsume('timer'));
+// On Click on each Button (save or stop) from the Timer
 elements.stopButton.addEventListener('click', resetTimer);
+elements.saveButton.addEventListener('click', () => controlSaveConsume('timer'));
 elements.saveButton2.addEventListener('click', () => controlSaveConsume('input'));
 elements.saveButton3.addEventListener('click', () => controlSaveConsume('portion'));
 elements.saveButton4.addEventListener('click', () => controlSaveConsume('flush'));
@@ -583,56 +565,85 @@ const controlTable = (page = 1) => {
     // Clear Table Content
     consumeView.clearConsumesTable();
 
-    // Render consumes to table
     const goToPage = page;
+    // Set state to have the goToPage saved
     state.page = goToPage;
+
+    // Render consumes to table
+    // resPerPage from base.js
     consumeView.renderConsumesTable(state.consumes.list, goToPage, resPerPage);
 };
 
-elements.tableButtons.addEventListener('click', e => {
-    const btn = e.target.closest('.btn-inline');
+// On Click on table pages
+elements.tableButtons.addEventListener('click', event => {
+    const btn = event.target.closest('.btn-inline');
     if (btn) {
         const goToPage = parseInt(btn.dataset.goto, 5);
-        consumeView.clearConsumesTable();
-        consumeView.renderConsumesTable(state.consumes.list, goToPage, resPerPage);
+        // Set state to have the goToPage saved
         state.page = goToPage;
+
+        // reset the Table UI
+        consumeView.clearConsumesTable();
+
+        // Render consumes to table
+        // resPerPage from base.js
+        consumeView.renderConsumesTable(state.consumes.list, goToPage, resPerPage);
     }
 });
 
+// Handle save, edit or delete buttons from table rows
 const handleTableButtons = event => {
+    // If the target from the event is one of those buttons ( save, edit or delete)
     if (event.target.dataset.type) {
         const parent = event.target.parentNode.parentNode;
         const id = event.target.parentNode.parentNode.id;
+
         switch (event.target.dataset.type) {
             case 'edit':
+                // Disable all edits
                 disableAllEdits(elements.tableConsumes);
 
+                // Change the text from the "edit" button to "save"
                 event.target.childNodes[0].nodeValue = 'Save';
                 event.target.dataset.type = 'save';
 
+                // Change the Mins input from that row to enabled
                 parent.childNodes[5].childNodes[0].disabled = false;
                 parent.childNodes[5].childNodes[0].classList.remove('disabled');
                 parent.childNodes[5].childNodes[0].focus();
 
                 break;
             case 'delete':
+                // Delete the consume from consumes
                 state.consumes.deleteConsume(id);
+
+                // Rerender the pages and the current page => rerender the manage section
+                // If the deleted consume was the last from that page and go to the previous page and remove button to next page
                 if (state.consumes.list.length - 1 < resPerPage && state.page > 1) {
                     controlManage(state.page - 1);
-                    console.log('hi');
-                } else {
+                }
+                // If the deleted consumed doesn't affect the resulting pages
+                else {
                     controlManage(state.page);
                 }
 
                 break;
             case 'save':
+                // Get the value of the mins input
                 const value = parent.childNodes[5].childNodes[0].value;
+
+                // Update the consume from consumes
                 state.consumes.updateConsume(id, value);
+
+                // Change the text from the "save" button to "edit"
                 event.target.childNodes[0].nodeValue = 'Edit';
                 event.target.dataset.type = 'edit';
 
+                // Change the Mins input from that row to disabled
                 parent.childNodes[5].childNodes[0].disabled = true;
                 parent.childNodes[5].childNodes[0].classList.add('disabled');
+
+                // Rerender the pages and the current page => rerender the manage section
                 controlManage(state.page);
 
                 break;
@@ -640,69 +651,71 @@ const handleTableButtons = event => {
     }
 };
 
+// Disable All Edits from a specific table
 const disableAllEdits = table => {
+    // For each child from the table
     [...table.childNodes].forEach(child => {
         const id = child.id;
+        // If the child isn't a consume entry => return
         if (!id) return;
+        // If the child option is different from edit and save => return
         if (child.childNodes[9].childNodes[0].dataset.type != 'edit' && child.childNodes[9].childNodes[0].dataset.type != 'save') return;
+
+        // Reset the text from the "save" button to "edit"
         child.childNodes[9].childNodes[0].childNodes[0].nodeValue = 'Edit';
         child.childNodes[9].childNodes[0].dataset.type = 'edit';
+        // Change the Mins input from that row to disabled
         child.childNodes[5].childNodes[0].disabled = true;
-        child.childNodes[5].childNodes[0].value = convertToMin(state.consumes.getTime(id));
         child.childNodes[5].childNodes[0].classList.add('disabled');
-        const type = state.consumes.getType(id);
-        child.childNodes[7].childNodes[0].nodeValue = nFormatter(convertToMin(state.consumes.getTime(id)) * consumeTypes[type], 1);
+        // Set the value of the mins input and convert it to mins
+        child.childNodes[5].childNodes[0].value = convertToMin(state.consumes.getTime(id));
+
+        // Render the value of Liters of the consume to the amount of liters
+        consumeView.setLitersIntoTableRow(child, state.consumes.getTime(id), state.consumes.getType(id));
     });
 };
 
+// Convert seconds to minutes
 const convertToMin = seconds => {
     return (seconds / 60).toFixed(2);
 };
 
+// Handle the Min input change (every key entered will trigger this function)
 const handleInputChange = event => {
+    // If the key is "enter" => simulate a click on "save" button
     if (event.keyCode == '13') {
         const saveButton = document.querySelector("[data-type='save']");
         saveButton.click();
     }
+    // Get the actual mins from the input
     const actualTime = event.target.value;
+
     const parentRow = event.target.parentNode.parentNode;
     const id = parentRow.id;
-    const type = state.consumes.getType(id);
-    if (isNaN(consumeTypes[type])) {
-        parentRow.childNodes[7].childNodes[0].nodeValue = nFormatter(consumeTypes['bath'][type], 1);
-    } else {
-        parentRow.childNodes[7].childNodes[0].nodeValue = nFormatter(actualTime * consumeTypes[type], 1);
-    }
+
+    // Render the value of Liters of the consume to the amount of liters
+    consumeView.setLitersIntoTableRow(parentRow, actualTime * 60, state.consumes.getType(id));
 };
 
-const nFormatter = (num, digits) => {
-    var si = [{ value: 1, symbol: '' }, { value: 1e3, symbol: 'k' }, { value: 1e6, symbol: 'M' }, { value: 1e9, symbol: 'G' }, { value: 1e12, symbol: 'T' }, { value: 1e15, symbol: 'P' }, { value: 1e18, symbol: 'E' }];
-    var rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-    var i;
-    for (i = si.length - 1; i > 0; i--) {
-        if (num >= si[i].value) {
-            break;
-        }
-    }
-    if (num >= si[si.length - 1].value) {
-        return '∞';
-    } else {
-        return (num / si[i].value).toFixed(digits).replace(rx, '$1') + si[i].symbol;
-    }
-};
-
-elements.tableConsumes.addEventListener('click', event => handleTableButtons(event));
-
-elements.tableConsumes.addEventListener('keyup', event => handleInputChange(event));
-
+// Handle click outside of the table to disable input || reset input
 const handleClickOutside = event => {
+    // Is the Click inside of the table?
     const isClickInside = elements.tableDOM.contains(event.target);
 
+    // If the click was outside of the table
     if (!isClickInside) {
+        // Disable all inputs and reset the input
         disableAllEdits(elements.tableConsumes);
     }
 };
 
+// On Click save, edit or delete buttons from table rows do something
+elements.tableConsumes.addEventListener('click', event => handleTableButtons(event));
+
+// On Key Up on min input from each table's row do something
+elements.tableConsumes.addEventListener('keyup', event => handleInputChange(event));
+
+// On Click on the document try to handle a click outside of the table
 document.addEventListener('click', event => handleClickOutside(event));
 
 /**
@@ -842,6 +855,7 @@ const convertToFullDate = date => {
  */
 Date.prototype.getWeek = function(dowOffset = 1) {
     /*getWeek() was developed by Nick Baicoianu at MeanFreePath: http://www.meanfreepath.com */
+    // This has some small changes according to the needs of this project
 
     dowOffset = typeof dowOffset == 'number' ? dowOffset : 0; //default dowOffset to zero
     var newYear = new Date(this.getFullYear(), 0, 1);
