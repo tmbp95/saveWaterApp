@@ -8,7 +8,8 @@ export const clearConsumesTable = () => {
 
 // Render each consume using a markup
 const renderConsume = consume => {
-    const dateArray = consume.date.toString().split(' ');
+    const date = new Date(consume.date);
+    const dateArray = date.toString().split(' ');
     const month = dateArray[1];
     const day = dateArray[2];
     const time = isNaN(convertToMin(consume.time)) ? '<td>∞</td>' : `<td><input class="disabled" type="number" value="${convertToMin(consume.time)}" disabled/></td>`;
@@ -203,6 +204,17 @@ export const renderWaterAnimation = percentage => {
 export const renderTextInfo = (activeItem, nameItem, type = 'medium') => {
     // Change the UI text with the new type of consume
     elements.typeConsumeText.textContent = nameItem;
+    let text;
+    if (activeItem === 'shower') {
+        text = 'Turn off the tap while soaping';
+    } else if (activeItem === 'handsWash') {
+        text = 'Turn off the tap while you scrub';
+    } else if (activeItem === 'toiletFlush') {
+        text = 'Reduce the water at each flush';
+    } else {
+        text = 'Why not a Shower instead?';
+    }
+    elements.typeConsumeDescription.textContent = text;
 
     // Change the UI text with the amount of liters per minute
     if (typeof consumeTypes[activeItem] != 'number') {

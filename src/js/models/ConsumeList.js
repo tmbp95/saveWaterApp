@@ -8,12 +8,17 @@ export default class ConsumeList {
 
     addConsume(consume) {
         this.list.unshift(consume);
+        // Persist the data in localStorage
+        this.persistData();
         return consume;
     }
 
     deleteConsume(id) {
         const index = this.list.findIndex(el => el.id === id);
         this.list.splice(index, 1);
+
+        // Persist the data in localStorage
+        this.persistData();
     }
 
     getTime(id) {
@@ -41,5 +46,18 @@ export default class ConsumeList {
         } else {
             elm.liters = (newTime / 60) * consumeTypes[elm.type];
         }
+
+        // Persist the data in localStorage
+        this.persistData();
+    }
+
+    persistData() {
+        localStorage.setItem('consumeList', JSON.stringify(this.list));
+    }
+
+    readStorage() {
+        const storage = JSON.parse(localStorage.getItem('consumeList'));
+        // Restoring list from the localStorage
+        if (storage) this.list = storage;
     }
 }

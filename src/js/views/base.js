@@ -16,6 +16,7 @@ export const elements = {
     waterAnimationBig: document.querySelector('.info--big'),
     typeConsume: document.querySelector('.sidebar__nav'),
     typeConsumeText: document.querySelector('.water-animation__type'),
+    typeConsumeDescription: document.querySelector('.water-animation__description'),
     waterPerMinuteText: document.querySelector('.waterPerMinute'),
     timer: document.querySelector('.timer__auto'),
     timerDOM: document.querySelector('.timer'),

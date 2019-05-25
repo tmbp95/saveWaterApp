@@ -49,7 +49,7 @@ body {
 }
 
 .heading-quad {
-    font-size: $default-font-size * 2;
+    font-size: $default-font-size * 1.4;
     color: #ffffff;
     font-weight: 400;
     line-height: 1.2;
@@ -64,6 +64,17 @@ body {
 
 .link {
     color: $color-white;
+}
+
+.instalinks {
+    color: $color-primary;
+    text-decoration: none;
+    transition: all 0.5s;
+
+    &:hover {
+        color: $color-grey-dark-3;
+        transition: all 0.5s;
+    }
 }
 
 .small-text {

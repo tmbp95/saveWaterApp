@@ -35,34 +35,38 @@ const state = {
 /**
  * INITIAL VALUES JUST FOR TESTING THE APP
  **/
-const date1 = new Date();
-date1.setDate(date1.getDate() - 4);
 
-const date2 = new Date();
-date2.setDate(date2.getDate() - 3);
+const storage = JSON.parse(localStorage.getItem('consumeList'));
+if (!storage) {
+    if (!state.consumes) state.consumes = new ConsumeList();
+    const date1 = new Date();
+    date1.setDate(date1.getDate() - 4);
 
-const date3 = new Date();
-date3.setDate(date3.getDate() - 2);
+    const date2 = new Date();
+    date2.setDate(date2.getDate() - 3);
 
-const date4 = new Date();
-date4.setDate(date4.getDate() - 1);
+    const date3 = new Date();
+    date3.setDate(date3.getDate() - 2);
 
-state.consumes = new ConsumeList();
-const consume1 = new Consume('shower', 'Shower', 800, date1);
-const consume2 = new Consume('shower', 'Shower', 600, date2);
-const consume3 = new Consume('shower', 'Shower', 800, date3);
-const consume4 = new Consume('shower', 'Shower', 700, date4);
-const consume5 = new Consume('shower', 'Shower', 600, new Date());
-consume1.calcConsume();
-consume2.calcConsume();
-consume3.calcConsume();
-consume4.calcConsume();
-consume5.calcConsume();
-state.consumes.addConsume(consume1);
-state.consumes.addConsume(consume2);
-state.consumes.addConsume(consume3);
-state.consumes.addConsume(consume4);
-state.consumes.addConsume(consume5);
+    const date4 = new Date();
+    date4.setDate(date4.getDate() - 1);
+
+    const consume1 = new Consume('shower', 'Shower', 800, date1);
+    const consume2 = new Consume('shower', 'Shower', 600, date2);
+    const consume3 = new Consume('shower', 'Shower', 800, date3);
+    const consume4 = new Consume('shower', 'Shower', 700, date4);
+    const consume5 = new Consume('shower', 'Shower', 600, new Date());
+    consume1.calcConsume();
+    consume2.calcConsume();
+    consume3.calcConsume();
+    consume4.calcConsume();
+    consume5.calcConsume();
+    state.consumes.addConsume(consume1);
+    state.consumes.addConsume(consume2);
+    state.consumes.addConsume(consume3);
+    state.consumes.addConsume(consume4);
+    state.consumes.addConsume(consume5);
+}
 
 /**
  * MENU CONTROLLER
@@ -86,7 +90,13 @@ const controlMenu = () => {
     controlSection(menuOption);
 };
 // The Beginning of the Controllers
-['hashchange', 'load'].forEach(event => window.addEventListener(event, controlMenu));
+['hashchange', 'load'].forEach(event => {
+    window.addEventListener(event, controlMenu);
+    if (!state.consumes) state.consumes = new ConsumeList();
+
+    // Restore likes
+    state.consumes.readStorage();
+});
 
 /**
  * SECTION CONTROLLER
@@ -428,9 +438,6 @@ const controlSaveConsume = type => {
 
     // if the save button was from the timer... TODO
     if (type === 'timer') {
-        // If the consume state is empty, create one
-        if (!state.consumes) state.consumes = new ConsumeList();
-
         // If there IS water consumption do something
         if (state.time > 0) {
             console.log('Creating consume', { activeItem, nameItem, timeSeconds: state.time, date: new Date() });
@@ -476,9 +483,6 @@ const controlSaveConsume = type => {
                 console.log(time);
             }
         });
-
-        // If the consume state is empty, create one
-        if (!state.consumes) state.consumes = new ConsumeList();
 
         // If there IS water consumption do something
         if (time > 0) {
@@ -779,6 +783,7 @@ const createWeekStruct = () => {
     for (let i = 6; i >= 0; i--) {
         let day = new Date();
         day.setDate(day.getDate() - i);
+
         const weekDay = findWeekDay(day);
         weekAmount[weekDay] = 0;
     }
@@ -787,11 +792,12 @@ const createWeekStruct = () => {
     // BUT only for this week starting at Monday and ending at Sunday
     const todayDay = new Date();
     const objWeek = state.consumes.list
-        .map(consume => findWeekDay(consume.date))
+        .map(consume => findWeekDay(new Date(consume.date)))
         .reduce((counter, consumeWeekDay, cur) => {
             const consume = state.consumes.list[cur];
+            const constumeDate = new Date(consume.date);
             // If the day is from the past week but not equal to this day - 7, do something
-            if (consume.date.getDate() >= todayDay.getDate() - 6) {
+            if (constumeDate.getDate() >= todayDay.getDate() - 6) {
                 counter[consumeWeekDay] = counter[consumeWeekDay] + consume.liters;
             }
             return counter;
@@ -811,6 +817,7 @@ const createWeekStruct = () => {
 
 // Find the week day from date
 const findWeekDay = date => {
+    console.log(date);
     const dayOfWeek = date.getDay();
     const weekDay = isNaN(dayOfWeek) ? null : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dayOfWeek];
     return weekDay;
@@ -818,6 +825,7 @@ const findWeekDay = date => {
 
 // Pick any date and convert it to the format yyyy-mm-dd
 const convertToFullDate = date => {
+    date = new Date(date);
     const year = date.getFullYear();
     const month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
     const day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
