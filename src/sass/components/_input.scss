@@ -8,6 +8,7 @@
     height: 2.5rem;
     text-align: center;
     border-radius: 0%;
+    -webkit-transition: border 0.5s, box-shadow 0.5s;
     transition: border 0.5s, box-shadow 0.5s;
 }
 

@@ -21,6 +21,7 @@ const renderConsume = consume => {
             <td>${nFormatter(consume.liters.toFixed(1), 1)}</td>
             ${buttons}
         </tr>
+        
     `;
     elements.tableConsumes.insertAdjacentHTML('beforeend', markup);
 };

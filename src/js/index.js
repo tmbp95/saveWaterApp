@@ -128,6 +128,14 @@ const controlAddConsume = () => {
 
     // Control Timer to get user input
     // controlTimer();
+
+    [...elements.successMessage, ...elements.errorMessage].forEach(elm => {
+        elm.style.opacity = 0;
+        elm.style.display = 'none';
+    });
+
+    resetTimer();
+    resetInputs();
 };
 
 /**
@@ -243,6 +251,10 @@ let firstClick = true;
 let timerInterval = -1;
 
 elements.timer.addEventListener('click', () => {
+    [...elements.successMessage, ...elements.errorMessage].forEach(elm => {
+        elm.style.opacity = 0;
+        elm.style.display = 'none';
+    });
     // If it IS the first time the user clicks do something
     if (firstClick) {
         // Reset the Timer to inital configuration
@@ -300,6 +312,11 @@ const resetTimer = () => {
     // Prepare the UI of the timer element to Start configuration
     consumeView.renderTextTimer('start');
 
+    [...elements.successMessage, ...elements.errorMessage].forEach(elm => {
+        elm.style.opacity = 0;
+        elm.style.display = 'none';
+    });
+
     // Clear the interval and set pause
     clearInterval(timerInterval);
     timerInterval = -1;
@@ -308,6 +325,11 @@ const resetTimer = () => {
 
 // TODOOOOO!!!!
 const controlInputs = e => {
+    [...elements.successMessage, ...elements.errorMessage].forEach(elm => {
+        elm.style.opacity = 0;
+        elm.style.display = 'none';
+    });
+
     const targetClassList = [...e.target.classList];
     let newValue = 0;
     if (targetClassList.includes('btn__add')) {
@@ -356,17 +378,28 @@ const toggleDisable = typeInput => {
     // If the value of the input is equal to its min then disable the dec button
     decButton.disabled = +typeInput.value == +typeInput.min;
 };
+
 elements.showInput.addEventListener('click', event => {
     elements.timerInputs.style.display = 'flex';
     elements.saveButton2.style.display = 'block';
     console.log(event.target);
     const btn = event.target.closest('.showInput');
     btn.style.display = 'none';
+
+    [...elements.successMessage, ...elements.errorMessage].forEach(elm => {
+        elm.style.opacity = 0;
+        elm.style.display = 'none';
+    });
 });
 
 elements.portion.addEventListener('click', event => changeBathTub(event));
 
 const changeBathTub = event => {
+    [...elements.successMessage, ...elements.errorMessage].forEach(elm => {
+        elm.style.opacity = 0;
+        elm.style.display = 'none';
+    });
+
     const btn = event.target.closest('.timer__option');
     if (btn.dataset.type) {
         [...elements.portion.childNodes].forEach(child => {
@@ -384,6 +417,11 @@ const changeBathTub = event => {
  * SAVE CONSUMES CONTROLLER
  **/
 const controlSaveConsume = type => {
+    [...elements.successMessage, ...elements.errorMessage].forEach(elm => {
+        elm.style.opacity = 0;
+        elm.style.display = 'none';
+    });
+
     // Pick the active item from the sidebar
     let [activeItem, nameItem] = controlSidebar();
     activeItem = activeItem.dataset.itemid;
@@ -399,10 +437,14 @@ const controlSaveConsume = type => {
             const consume = new Consume(activeItem, nameItem, state.time, new Date());
             consume.calcConsume();
             state.consumes.addConsume(consume);
+            elements.saveButton.parentNode.nextElementSibling.firstElementChild.style.display = 'block';
+            elements.saveButton.parentNode.nextElementSibling.firstElementChild.style.opacity = '1';
         }
         // If there is NO consume
         else {
             console.log('Oups, seems like there is no consume!');
+            elements.saveButton.parentNode.nextElementSibling.lastElementChild.style.display = 'block';
+            elements.saveButton.parentNode.nextElementSibling.lastElementChild.style.opacity = '1';
         }
 
         // Prepare the UI of the timer element to Restart configuration
@@ -444,10 +486,15 @@ const controlSaveConsume = type => {
             const consume = new Consume(activeItem, nameItem, time, new Date());
             consume.calcConsume();
             state.consumes.addConsume(consume);
+            elements.saveButton2.parentNode.nextElementSibling.style.display = 'block';
+            console.log(elements.saveButton2.parentNode.nextElementSibling.style.display);
+            elements.saveButton2.parentNode.nextElementSibling.style.opacity = '1';
         }
         // If there is NO consume
         else {
             console.log('Oups, seems like there is no consume!');
+            elements.saveButton2.parentNode.parentNode.lastElementChild.style.display = 'block';
+            elements.saveButton2.parentNode.parentNode.lastElementChild.style.opacity = '1';
         }
 
         resetInputs();
@@ -464,11 +511,15 @@ const controlSaveConsume = type => {
         const consume = new Consume(state.bathTub, nameItem, '∞', new Date());
         consume.calcConsume();
         state.consumes.addConsume(consume);
+        elements.saveButton3.parentNode.nextElementSibling.style.display = 'block';
+        elements.saveButton3.parentNode.nextElementSibling.style.opacity = '1';
     } else if (type === 'flush') {
         console.log('Creating consume', { activeItem, nameItem, timeSeconds: '∞', date: new Date() });
         const consume = new Consume(activeItem, nameItem, '∞', new Date());
         consume.calcConsume();
         state.consumes.addConsume(consume);
+        elements.saveButton4.parentNode.nextElementSibling.style.display = 'block';
+        elements.saveButton4.parentNode.nextElementSibling.style.opacity = '1';
     }
 
     console.log(state.consumes);

@@ -27,13 +27,17 @@ body {
 
 .heading-secondary {
     font-size: $default-font-size * 3;
-    // color: $color-grey-dark-3;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 0%, rgba(0, 0, 0, 0.15) 100%), radial-gradient(at top center, rgba(255, 255, 255, 0.4) 0%, rgba(0, 0, 0, 0.4) 120%) #989898;
-    background-blend-mode: multiply, multiply;
-    -webkit-background-clip: text;
-    color: transparent;
+    color: $color-grey-dark-3;
+
     font-weight: 700;
     line-height: 1.2;
+
+    @supports (background-clip: text) or (-webkit-background-clip: text) {
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 0%, rgba(0, 0, 0, 0.15) 100%), radial-gradient(at top center, rgba(255, 255, 255, 0.4) 0%, rgba(0, 0, 0, 0.4) 120%) #989898;
+        -webkit-background-blend-mode: multiply, multiply;
+        -webkit-background-clip: text;
+        color: transparent;
+    }
 }
 
 .heading-tertiary {

@@ -40,6 +40,7 @@
             background-color: transparent;
             color: inherit;
             cursor: pointer;
+            font-size: inherit;
 
             &:hover {
                 color: $color-primary;
@@ -51,6 +52,13 @@
             box-sizing: border-box;
             width: 4.5rem;
             text-align: right;
+            font-size: inherit;
+        }
+
+        input:disabled {
+            -webkit-text-fill-color: inherit; /* Override iOS / Android font color change */
+            -webkit-opacity: 1; /* Override iOS opacity change affecting text & background color */
+            color: inherit;
         }
 
         .disabled {
@@ -85,8 +93,13 @@
     padding: 0.8rem 1.2rem;
     border-radius: 10rem;
     cursor: pointer;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
+    -webkit-transition: all 0.2s;
     transition: all 0.2s;
 }
 .btn-inline svg {
@@ -109,6 +122,9 @@
 .results__btn--prev,
 .likes__btn--prev {
     float: left;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: reverse;
+    -ms-flex-direction: row-reverse;
     flex-direction: row-reverse;
 }
 .results__btn--next,

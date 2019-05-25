@@ -124,6 +124,24 @@
         border-radius: 8px;
     }
 
+    &__added {
+        color: $color-primary;
+        font-size: $default-font-size;
+        text-align: center;
+        display: none;
+        opacity: 0;
+        transition: all 1.5s;
+    }
+
+    &__error {
+        color: $color-alert;
+        font-size: $default-font-size;
+        text-align: center;
+        display: none;
+        opacity: 0;
+        transition: all 1.5s;
+    }
+
     &__boxes {
         display: flex;
         flex-direction: column;

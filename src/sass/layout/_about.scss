@@ -8,13 +8,30 @@
     flex-direction: column;
     justify-content: center;
 
+    @media only screen and (max-width: $bp-small) {
+        flex: 1;
+        max-width: none;
+        width: 70%;
+        min-height: 1rem;
+        margin-top: 5rem;
+        margin-bottom: 5rem;
+    }
+
     &__img {
         height: 46rem;
+
+        @media only screen and (max-width: $bp-small) {
+            margin-top: 5rem;
+        }
     }
 
     &__description {
         font-size: $default-font-size;
         margin-top: 6rem;
+
+        @media only screen and (max-width: $bp-small) {
+            margin-top: 2rem;
+        }
     }
 
     &__owner {

@@ -1,6 +1,12 @@
 .water-animation {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
     flex-direction: column;
+    -ms-flex-pack: distribute;
     justify-content: space-around;
 
     &__type {
@@ -9,8 +15,18 @@
     }
 
     &--small {
+        -webkit-box-flex: 1;
+        -ms-flex: 1;
         flex: 1;
         background: $color-gradient-3;
+
+        @media only screen and (max-width: $bp-small) {
+            -webkit-box-flex: 1;
+            -ms-flex: 1;
+            flex: 1;
+            height: 100%;
+            padding: 5rem;
+        }
     }
 
     &--big {
@@ -19,6 +35,8 @@
 }
 
 .tapWater {
+    -ms-flex-item-align: center;
+    -ms-grid-row-align: center;
     align-self: center;
 
     margin-top: -10rem;
@@ -26,18 +44,30 @@
     width: 5rem;
     height: 5.5rem;
     z-index: 200;
+
+    @media only screen and (max-width: $bp-small) {
+        display: none;
+    }
 }
 
 .info {
+    -ms-flex-item-align: center;
     align-self: center;
 
     position: relative;
     background-color: rgba($color-white, 0.7);
+    -webkit-box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.2);
     box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.2);
     overflow: hidden;
+    -webkit-transform: scale(1.5);
+    -ms-transform: scale(1.5);
     transform: scale(1.5);
     margin-top: -3rem;
     z-index: 2;
+
+    display: -webkit-box;
+
+    display: -ms-flexbox;
 
     display: flex;
 
@@ -46,6 +76,10 @@
         height: 7rem;
         border: 2px solid white;
         border-radius: 2rem;
+
+        @media only screen and (max-width: $bp-small) {
+            margin-top: 5rem;
+        }
     }
 
     &--big {
@@ -53,6 +87,7 @@
         height: 25rem;
         border: 1px solid $color-grey-dark-2;
         border-radius: 1rem;
+        -webkit-box-sizing: content-box;
         box-sizing: content-box;
         margin-bottom: 5rem;
     }
@@ -64,6 +99,8 @@
         z-index: 100;
 
         &--small {
+            -ms-flex-item-align: center;
+            -ms-grid-row-align: center;
             align-self: center;
             font-size: $default-font-size / 1.5;
             color: $color-grey-dark-3;
@@ -78,6 +115,8 @@
             // bottom: 42%;
             bottom: 0%;
             z-index: 300;
+            -webkit-transition: $transitionText;
+            -o-transition: $transitionText;
             transition: $transitionText;
 
             span {
@@ -88,6 +127,8 @@
             }
 
             &-alert {
+                -webkit-transition: $transitionText, color 0.5s;
+                -o-transition: $transitionText, color 0.5s;
                 transition: $transitionText, color 0.5s;
                 color: rgba(255, 0, 0, 0.8);
             }
@@ -95,6 +136,8 @@
     }
 }
 .line {
+    -ms-flex-item-align: center;
+    -ms-grid-row-align: center;
     align-self: center;
 
     width: 22.5rem;
@@ -139,6 +182,8 @@
     left: -30%;
     bottom: -180%;
     border-radius: 22%;
+    -webkit-transition: all 1.4s linear;
+    -o-transition: all 1.4s linear;
     transition: all 1.4s linear;
     animation: waves 3.4s linear reverse infinite;
     -webkit-transform: translateZ(0);
@@ -149,7 +194,10 @@
         left: -40%;
         bottom: -125%;
         // bottom: -50%;
+        -webkit-transition: $transitionWave;
+        -o-transition: $transitionWave;
         transition: $transitionWave;
+        -webkit-animation: waves 2.4s linear infinite;
         animation: waves 2.4s linear infinite;
         z-index: 200;
     }
@@ -159,7 +207,10 @@
         left: -50%;
         bottom: -125%;
         // bottom: -50%;
+        -webkit-transition: $transitionWave;
+        -o-transition: $transitionWave;
         transition: $transitionWave;
+        -webkit-animation: waves 3.4s linear infinite;
         animation: waves 3.4s linear infinite;
         z-index: 200;
     }
@@ -169,7 +220,10 @@
         left: -60%;
         bottom: -125%;
         // bottom: -50%;
+        -webkit-transition: $transitionWave;
+        -o-transition: $transitionWave;
         transition: $transitionWave;
+        -webkit-animation: waves 4.4s linear infinite;
         animation: waves 4.4s linear infinite;
         z-index: 200;
     }
@@ -179,7 +233,10 @@
         left: -30%;
         bottom: -125%;
         // bottom: -50%;
+        -webkit-transition: $transitionWave;
+        -o-transition: $transitionWave;
         transition: $transitionWave;
+        -webkit-animation: waves 4.4s linear infinite;
         animation: waves 4.4s linear infinite;
         z-index: 200;
     }
@@ -189,50 +246,80 @@
         left: -35%;
         bottom: -125%;
         // bottom: -50%;
+        -webkit-transition: $transitionWave;
+        -o-transition: $transitionWave;
         transition: $transitionWave;
         animation: waves 3.4s linear reverse infinite;
         z-index: 200;
+
+        @media only screen and (max-width: $bp-smallest2) {
+            display: none;
+        }
     }
 }
 
 .transparentblue {
+    background: -webkit-gradient(linear, left top, right top, from(rgba($color-tertiary-light, 0.4)), to(rgba($color-primary-medium, 0.3)));
+    background: -webkit-linear-gradient(left, rgba($color-tertiary-light, 0.4), rgba($color-primary-medium, 0.3));
+    background: -o-linear-gradient(left, rgba($color-tertiary-light, 0.4), rgba($color-primary-medium, 0.3));
     background: linear-gradient(to right, rgba($color-tertiary-light, 0.4), rgba($color-primary-medium, 0.3));
 }
 
 .transparentwhite {
+    background: -webkit-gradient(linear, right top, left top, from(rgba($color-white, 0.4)), to(rgba($color-tertiary-light, 0.4)));
+    background: -webkit-linear-gradient(right, rgba($color-white, 0.4), rgba($color-tertiary-light, 0.4));
+    background: -o-linear-gradient(right, rgba($color-white, 0.4), rgba($color-tertiary-light, 0.4));
     background: linear-gradient(to left, rgba($color-white, 0.4), rgba($color-tertiary-light, 0.4));
 }
 
 .lightblue {
+    background: -webkit-gradient(linear, left top, right top, from($color-primary-medium), to($color-tertiary-light));
+    background: -webkit-linear-gradient(left, $color-primary-medium, $color-tertiary-light);
+    background: -o-linear-gradient(left, $color-primary-medium, $color-tertiary-light);
     background: linear-gradient(to right, $color-primary-medium, $color-tertiary-light);
 }
 
 .drops {
+    -ms-flex-item-align: center;
+    -ms-grid-row-align: center;
     align-self: center;
     width: 12px;
     height: 12px;
 
     position: absolute;
-    top: 47%;
+    top: 48%;
     border-radius: 1em;
     border-top-right-radius: 0.2em;
     opacity: 0;
+    -webkit-animation: drops 2.5s ease-in-out infinite;
     animation: drops 2.5s ease-in-out infinite;
+    -webkit-box-shadow: $shadow-dark;
     box-shadow: $shadow-dark;
     z-index: 100;
+
+    @media only screen and (max-width: $bp-medium) {
+        top: 33em;
+    }
+
+    @media only screen and (max-width: $bp-small) {
+        display: none;
+    }
 }
 .drop2 {
+    -webkit-animation-delay: 0.8s;
     animation-delay: 0.8s;
 }
 .drop3 {
+    -webkit-animation-delay: 1.7s;
     animation-delay: 1.7s;
 }
 
-@keyframes drops {
+@-webkit-keyframes drops {
     0% {
         width: 6px;
         height: 6px;
         opacity: 0.2;
+        -webkit-transform: translateY(0) rotate(-40deg);
         transform: translateY(0) rotate(-40deg);
     }
 
@@ -243,12 +330,35 @@
     100% {
         width: 12px;
         height: 12px;
-        transform: translateY(22rem) rotate(-40deg);
+        -webkit-transform: translateY(22em) rotate(-40deg);
+        transform: translateY(22em) rotate(-40deg);
     }
 }
 
-@keyframes waves {
+@keyframes drops {
     0% {
+        width: 6px;
+        height: 6px;
+        opacity: 0.2;
+        -webkit-transform: translateY(0) rotate(-40deg);
+        transform: translateY(0) rotate(-40deg);
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    100% {
+        width: 12px;
+        height: 12px;
+        -webkit-transform: translateY(22em) rotate(-40deg);
+        transform: translateY(22em) rotate(-40deg);
+    }
+}
+
+@-webkit-keyframes waves {
+    0% {
+        -webkit-transform: rotate(0);
         transform: rotate(0);
         border-radius: 30%;
     }
@@ -258,6 +368,43 @@
     }
 
     100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+        border-radius: 30%;
+    }
+}
+
+@keyframes waves {
+    0% {
+        -webkit-transform: rotate(0);
+        transform: rotate(0);
+        border-radius: 30%;
+    }
+
+    45% {
+        border-radius: 39%;
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+        border-radius: 30%;
+    }
+}
+
+@-webkit-keyframes waves-effect2 {
+    0% {
+        -webkit-transform: rotate(0);
+        transform: rotate(0);
+        border-radius: 30%;
+    }
+
+    45% {
+        border-radius: 39%;
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
         transform: rotate(360deg);
         border-radius: 30%;
     }
@@ -265,6 +412,7 @@
 
 @keyframes waves-effect2 {
     0% {
+        -webkit-transform: rotate(0);
         transform: rotate(0);
         border-radius: 30%;
     }
@@ -274,6 +422,7 @@
     }
 
     100% {
+        -webkit-transform: rotate(360deg);
         transform: rotate(360deg);
         border-radius: 30%;
     }

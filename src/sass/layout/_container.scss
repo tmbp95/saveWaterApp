@@ -14,17 +14,28 @@
         margin: 0;
         max-width: 100%;
         width: 100%;
+        border-radius: 0px;
     }
 }
 
 .content {
     display: flex;
 
+    @media only screen and (max-width: $bp-medium) {
+        flex-direction: column;
+    }
+
     &__left {
         flex: 0 0 10%;
         height: 100%;
         padding: 3rem;
         min-height: 55rem;
+
+        @media only screen and (max-width: $bp-medium) {
+            flex: 1;
+            min-height: 1rem;
+            padding: 0.5rem;
+        }
 
         &--shadow {
             border-left: 1px solid rgba($color-grey-dark-2, 0.5);

@@ -30,7 +30,9 @@ export const elements = {
     saveButton4: document.querySelector('.timer__flush--save'),
     tableDOM: document.querySelector('.table'),
     showInput: document.querySelector('.showInput'),
-    tableButtons: document.querySelector('.data-box__buttons')
+    tableButtons: document.querySelector('.data-box__buttons'),
+    successMessage: document.querySelectorAll('.timer__added'),
+    errorMessage: document.querySelectorAll('.timer__error')
 };
 
 export const consumeTypes = {
@@ -44,7 +46,7 @@ export const consumeTypes = {
     toiletFlush: 10
 };
 
-export const resPerPage = 3;
+export const resPerPage = 7;
 
 export const elementStrings = {
     loader: 'loader'

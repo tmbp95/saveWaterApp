@@ -17,7 +17,7 @@
                 <div class="content__left">
                     <header class="header">
                         <div class="loader">
-                            <h1 class="header__title" style="background-image: url(../../img/waterwave.png)"><span class="header__title--left">Save</span><span class="header__title--right">Water</span> <span class="header__title--bottom">App</span></h1>
+                            <h1 class="header__title" style="background-image: url(../../img/waterwave.png)"><span class="header__title--left">Save</span><span class="header__title--right">Water</span> <br /><span class="header__title--bottom">App</span></h1>
                         </div>
                         <nav class="topbar">
                             <ul class="topbar__nav">
@@ -39,7 +39,7 @@
                 <div class="content__right">
                     <section class="section-about">
                         <div class="about">
-                            <h2 class="heading-secondary">Don't waste, Water is Life!</h2>
+                            <h2 class="heading-secondary">Don't waste,<br />Water is Life!</h2>
                             <p class="about__description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda nihil quod deserunt, illum dignissimos praesentium non voluptates corrupti delectus rerum nulla consequuntur quasi repudiandae cum odio voluptatibus cumque libero pariatur.</p>
                             <p class="about__owner">Tiago Pereira</p>
                         </div>
@@ -50,15 +50,19 @@
                         <nav class="sidebar">
                             <ul class="sidebar__nav">
                                 <li class="sidebar__item sidebar__item--active" data-itemid="shower">
+                                    <span class="sidebar__description">Shower</span>
                                     <img src="img/bathtub-2.png" alt="" class="sidebar__icon sidebar__icon-1" />
                                 </li>
                                 <li class="sidebar__item " data-itemid="bath">
+                                    <span class="sidebar__description">Bath</span>
                                     <img src="img/bath-2.png" alt="" class="sidebar__icon sidebar__icon-3" />
                                 </li>
                                 <li class="sidebar__item " data-itemid="handsWash">
+                                    <span class="sidebar__description">Hands</span>
                                     <img src="img/sink-2.png" alt="" class="sidebar__icon sidebar__icon-2" />
                                 </li>
                                 <li class="sidebar__item " data-itemid="toiletFlush">
+                                    <span class="sidebar__description">Flush</span>
                                     <img src="img/toilet-2.png" alt="" class="sidebar__icon sidebar__icon-3" />
                                 </li>
                             </ul>
@@ -99,7 +103,6 @@
                             </script> -->
                         </div>
                         <div class="timer">
-                            <div class="timer__arrow"><span>&#10148;</span></div>
                             <h2 class="heading-tertiary">Add your water consumption time:</h2>
                             <div class="timer__auto timer__auto-pause">
                                 <p class="timer__text">00:00:00</p>
@@ -109,7 +112,11 @@
                                 <button class="btn btn__row--alert timer__timer--stop">Stop</button>
                                 <button class="btn timer__timer--save">Save</button>
                             </div>
-                            <p class="paragraph clickable showInput">- Click <span class="link">here</span> to insert your own value -</p>
+                            <div>
+                                <span class="timer__added">Successfully added.<br /><a href="#manage" class="topbar__link">Check your consumes here</a></span>
+                                <span class="timer__error">Oups, seems like there is no consume!<br />Please try again.</span>
+                            </div>
+                            <p class="paragraph clickable showInput">- OR click <span class="link">here</span> to insert your own value -</p>
                             <div class="timer__counter" style="display: none">
                                 <div class="timer__boxes">
                                     <button class="btn btn__add">+</button>
@@ -133,9 +140,10 @@
                             <div class="btn__row">
                                 <button class="btn timer__input--save" style="display: none">Save</button>
                             </div>
+                            <span class="timer__added">Successfully added.<br /><a href="#manage" class="topbar__link">Check your consumes here</a></span>
+                            <span class="timer__error">Oups, seems like there is no consume!<br />Please try again.</span>
                         </div>
                         <div class="timer portion">
-                            <div class="timer__arrow"><span>&#10148;</span></div>
                             <h2 class="heading-tertiary">Select your Bathtub and add your consume:</h2>
                             <div class="timer__portion">
                                 <div class="timer__option" data-type="small">
@@ -154,9 +162,10 @@
                             <div class="btn__row">
                                 <button class="btn timer__portion--save">Add</button>
                             </div>
+                            <span class="timer__added">Successfully added.<br /><a href="#manage" class="topbar__link">Check your consumes here</a></span>
+                            <span class="timer__error">Oups, seems like there is no consume!<br />Please try again.</span>
                         </div>
                         <div class="timer flush">
-                            <div class="timer__arrow"><span>&#10148;</span></div>
                             <h2 class="heading-tertiary">Select your Bathtub and add your consume:</h2>
                             <div class="timer__portion">
                                 <div class="timer__option timer__option--active" data-type="medium">
@@ -166,6 +175,8 @@
                             <div class="btn__row">
                                 <button class="btn timer__flush--save">Add</button>
                             </div>
+                            <span class="timer__added">Successfully added.<br /><a href="#manage" class="topbar__link">Check your consumes here</a></span>
+                            <span class="timer__error">Oups, seems like there is no consume!<br />Please try again.</span>
                         </div>
                     </section>
 

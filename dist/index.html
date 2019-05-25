@@ -17,7 +17,7 @@
                 <div class="content__left">
                     <header class="header">
                         <div class="loader">
-                            <h1 class="header__title" style="background-image: url(../../img/waterwave.png)"><span class="header__title--left">Save</span><span class="header__title--right">Water</span> <span class="header__title--bottom">App</span></h1>
+                            <h1 class="header__title" style="background-image: url(../../img/waterwave.png)"><span class="header__title--left">Save</span><span class="header__title--right">Water</span> <br /><span class="header__title--bottom">App</span></h1>
                         </div>
                         <nav class="topbar">
                             <ul class="topbar__nav">
@@ -27,7 +27,7 @@
                                 <li>&nbsp;</li>
                                 <li>&nbsp;</li>
                                 <li class="topbar__item ">
-                                    <a href="#timer" class="topbar__link">Add Consume</a>
+                                    <a href="#addConsume" class="topbar__link">Add Consume</a>
                                 </li>
                                 <li class="topbar__item ">
                                     <a href="#manage" class="topbar__link">Manage</a>
@@ -46,39 +46,40 @@
                         <img src="img/example.png" alt="" class="about__img" />
                     </section>
 
-                    <section class="section-timer">
+                    <section class="section-addConsume">
                         <nav class="sidebar">
                             <ul class="sidebar__nav">
-                                <li class="sidebar__item sidebar__item--active">
-                                    <a href="#" class="sidebar__link">
-                                        <img src="img/bathtub-2.png" alt="" class="sidebar__icon sidebar__icon-1" />
-                                    </a>
+                                <li class="sidebar__item sidebar__item--active" data-itemid="shower">
+                                    <span class="sidebar__description">Shower</span>
+                                    <img src="img/bathtub-2.png" alt="" class="sidebar__icon sidebar__icon-1" />
                                 </li>
-                                <li class="sidebar__item ">
-                                    <a href="#" class="sidebar__link">
-                                        <img src="img/sink-2.png" alt="" class="sidebar__icon sidebar__icon-2" />
-                                    </a>
+                                <li class="sidebar__item " data-itemid="bath">
+                                    <span class="sidebar__description">Bath</span>
+                                    <img src="img/bath-2.png" alt="" class="sidebar__icon sidebar__icon-3" />
                                 </li>
-                                <li class="sidebar__item ">
-                                    <a href="#" class="sidebar__link">
-                                        <img src="img/toilet-2.png" alt="" class="sidebar__icon sidebar__icon-3" />
-                                    </a>
+                                <li class="sidebar__item " data-itemid="handsWash">
+                                    <span class="sidebar__description">Hands</span>
+                                    <img src="img/sink-2.png" alt="" class="sidebar__icon sidebar__icon-2" />
+                                </li>
+                                <li class="sidebar__item " data-itemid="toiletFlush">
+                                    <span class="sidebar__description">Flush</span>
+                                    <img src="img/toilet-2.png" alt="" class="sidebar__icon sidebar__icon-3" />
                                 </li>
                             </ul>
                         </nav>
                         <div class="water-animation water-animation--small">
-                            <h2 class="heading-quad"><span class="water-animation__type">Shower</span><br />Liters per minute</h2>
-                            <img src="img/waterTap.png" alt="" class="tapWater" />
+                            <h2 class="heading-quad"><span class="water-animation__type">Shower</span><br />something here</h2>
+                            <img src="img/waterTap2.png" alt="" class="tapWater" />
 
                             <div class="drops lightblue"></div>
                             <div class="drops lightblue drop2"></div>
                             <div class="drops lightblue drop3"></div>
                             <div class="info info--small">
-                                <p class="info__text info__text--small">12 L/min</p>
+                                <p class="info__text info__text--small"><span class="waterPerMinute">12</span> L/min</p>
                                 <div class="wave lightblue"></div>
                             </div>
 
-                            <script>
+                            <!-- <script>
                                 const wave = document.querySelector('.wave');
                                 let bottom = -150;
 
@@ -99,33 +100,73 @@
                                         }
                                     }
                                 }
-                            </script>
+                            </script> -->
                         </div>
                         <div class="timer">
-                            <div class="timer__arrow"><span>&#10148;</span></div>
                             <h2 class="heading-tertiary">Add your water consumption time:</h2>
-                            <div class="timer__auto">
-                                <span class="timer__text">00:00:00</span>
+                            <div class="timer__auto timer__auto-pause">
+                                <p class="timer__text">00:00:00</p>
+                                <p class="timer__info">Press to Start</p>
                             </div>
-                            <p class="paragraph">- or -</p>
-                            <div class="timer__counter">
+                            <div class="btn__row">
+                                <button class="btn btn__row--alert timer__timer--stop">Stop</button>
+                                <button class="btn timer__timer--save">Save</button>
+                            </div>
+                            <p class="paragraph clickable showInput">- Click <span class="link">here</span> to insert your own value -</p>
+                            <div class="timer__counter" style="display: none">
                                 <div class="timer__boxes">
                                     <button class="btn btn__add">+</button>
-                                    <input type="number" class="input input__hours" value="00" min="0" max="24" />
+                                    <input type="number" class="input input__type" data-type="hours" value="0" min="0" max="24" />
+                                    <span>h</span>
                                     <button class="btn btn__remove">-</button>
                                 </div>
                                 <div class="timer__boxes">
                                     <button class="btn btn__add">+</button>
-                                    <input type="number" class="input input__minutes" value="00" min="0" max="60" />
+                                    <input type="number" class="input input__type" data-type="minutes" value="0" min="0" max="60" />
+                                    <span>m</span>
                                     <button class="btn btn__remove">-</button>
                                 </div>
                                 <div class="timer__boxes">
                                     <button class="btn btn__add">+</button>
-                                    <input type="number" class="input input__seconds" value="00" min="0" max="60" />
+                                    <input type="number" class="input input__type" data-type="seconds" value="0" min="0" max="60" />
+                                    <span>s</span>
                                     <button class="btn btn__remove">-</button>
                                 </div>
                             </div>
-                            <button class="btn timer__save">Save</button>
+                            <div class="btn__row">
+                                <button class="btn timer__input--save" style="display: none">Save</button>
+                            </div>
+                        </div>
+                        <div class="timer portion">
+                            <h2 class="heading-tertiary">Select your Bathtub and add your consume:</h2>
+                            <div class="timer__portion">
+                                <div class="timer__option" data-type="small">
+                                    <p class="timer__text timer__text--margin">Small<br />Bathtub</p>
+                                    <p class="timer__info timer__info--margin">140x70cm<br />55x27in</p>
+                                </div>
+                                <div class="timer__option timer__option--active" data-type="medium">
+                                    <p class="timer__text timer__text--margin">Standard<br />Bathtub</p>
+                                    <p class="timer__info timer__info--margin">170x70cm<br />67x27in</p>
+                                </div>
+                                <div class="timer__option" data-type="big">
+                                    <p class="timer__text timer__text--margin">Big<br />Bathtub</p>
+                                    <p class="timer__info timer__info--margin">180x70cm<br />70x27in</p>
+                                </div>
+                            </div>
+                            <div class="btn__row">
+                                <button class="btn timer__portion--save">Add</button>
+                            </div>
+                        </div>
+                        <div class="timer flush">
+                            <h2 class="heading-tertiary">Select your Bathtub and add your consume:</h2>
+                            <div class="timer__portion">
+                                <div class="timer__option timer__option--active" data-type="medium">
+                                    <p class="timer__text ">Flush<br />Toliet</p>
+                                </div>
+                            </div>
+                            <div class="btn__row">
+                                <button class="btn timer__flush--save">Add</button>
+                            </div>
                         </div>
                     </section>
 
@@ -143,26 +184,30 @@
                             </div>
                             <div class="data-box">
                                 <div class="data-box__table">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Type</th>
-                                                <th>Time</th>
-                                                <th>Liters</th>
-                                                <th>Options</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="consume-table">
-                                            <!-- 
+                                    <div class="table">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Type</th>
+                                                    <th>Mins</th>
+                                                    <th>Liters</th>
+                                                    <th>Options</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="consume-table">
+                                                <!-- 
                                             <tr>
                                                 <td>Shower</td>
                                                 <td>15</td>
                                                 <td>120</td>
                                                 <td>Edit | Delete</td>
                                             </tr>
-                                            -->
-                                        </tbody>
-                                    </table>
+                                            --></tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="data-box__buttons"></div>
                                 </div>
                                 <div class="data-box__chart">
                                     <canvas id="myChart"></canvas>
@@ -174,7 +219,7 @@
                             <h2 class="heading-tertiary">Today's Consume:</h2>
                             <div class="water-animation water-animation--big">
                                 <div class="info info--big">
-                                    <p class="info__text info__text--big water-animation__value">50<span>%</span></p>
+                                    <p class="info__text info__text--big water-animation__value">0<span>%</span></p>
                                     <div class="wave transparentwhite wave__1"></div>
                                     <div class="wave transparentblue wave__2"></div>
                                     <div class="wave transparentwhite wave__3"></div>

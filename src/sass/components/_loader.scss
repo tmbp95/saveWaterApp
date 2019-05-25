@@ -9,6 +9,16 @@
         transform-origin: 44% 50%;
         animation: rotate 1.5s infinite linear;
     }
+
+    @media only screen and (max-width: $bp-medium) {
+        margin: 0 0 1rem 1rem;
+        height: 5.5rem;
+    }
+
+    @media only screen and (max-width: $bp-smallest2) {
+        margin: 0;
+        height: 5.5rem;
+    }
 }
 
 @keyframes rotate {
