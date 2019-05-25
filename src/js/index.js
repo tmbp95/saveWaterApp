@@ -754,7 +754,6 @@ const controlWaterPercentage = () => {
     // Calculate today's consume
     const todaysConsume = fullDateArr.reduce((counter, date, index) => {
         if (date == todayDate) {
-            // console.log(index - 1);
             counter += state.consumes.list[index].liters;
         }
         return counter;
@@ -816,8 +815,6 @@ const createWeekStruct = () => {
             return counter;
         }, weekAmount);
 
-    console.log(objWeek);
-
     // For each objWeek key, create an array containing the consumed liters
     const arrWeek = [];
     Object.keys(objWeek).map(igKey => {
@@ -830,7 +827,6 @@ const createWeekStruct = () => {
 
 // Find the week day from date
 const findWeekDay = date => {
-    console.log(date);
     const dayOfWeek = date.getDay();
     const weekDay = isNaN(dayOfWeek) ? null : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dayOfWeek];
     return weekDay;
