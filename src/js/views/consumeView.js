@@ -255,10 +255,14 @@ export const renderTextInfo = (activeItem, nameItem, type = 'medium') => {
     // If the consumeType is a child of 'bath' => bath: { small: value , medium: value, big: value}
     if (typeof consumeTypes[activeItem] != 'number') {
         // Change the UI text with the amount of liters per minute => consumeTypes['bath'][type]
-        elements.waterPerMinuteText.textContent = consumeTypes[activeItem][type];
+        elements.waterPerMinuteText.textContent = consumeTypes[activeItem][type] + ' L';
     } else {
         // Change the UI text with the amount of liters per minute => consumeTypes[activeItem]
-        elements.waterPerMinuteText.textContent = consumeTypes[activeItem];
+        if (activeItem === 'toiletFlush') {
+            elements.waterPerMinuteText.textContent = consumeTypes[activeItem] + ' L';
+        } else {
+            elements.waterPerMinuteText.textContent = consumeTypes[activeItem] + ' L/min';
+        }
     }
 };
 
