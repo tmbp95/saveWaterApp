@@ -50,14 +50,14 @@ export const elements = {
 
 // Consume Types
 export const consumeTypes = {
-    shower: 12,
+    shower: 15,
     bath: {
-        big: 30,
-        medium: 25,
-        small: 15
+        big: 390,
+        medium: 300,
+        small: 150
     },
-    handsWash: 5,
-    toiletFlush: 10
+    handsWash: 10,
+    toiletFlush: 8
 };
 
 // Number of consumes per page in the table - Manage Section
