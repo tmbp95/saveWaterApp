@@ -29,33 +29,17 @@ const state = {
 const storage = JSON.parse(localStorage.getItem('consumeList'));
 if (!storage) {
     if (!state.consumes) state.consumes = new ConsumeList();
-    const date1 = new Date();
-    date1.setDate(date1.getDate() - 4);
 
-    const date2 = new Date();
-    date2.setDate(date2.getDate() - 3);
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
 
-    const date3 = new Date();
-    date3.setDate(date3.getDate() - 2);
-
-    const date4 = new Date();
-    date4.setDate(date4.getDate() - 1);
-
-    const consume1 = new Consume('shower', 'Shower', 650, date1);
-    const consume2 = new Consume('shower', 'Shower', 600, date2);
-    const consume3 = new Consume('shower', 'Shower', 500, date3);
-    const consume4 = new Consume('shower', 'Shower', 550, date4);
-    const consume5 = new Consume('handsWash', 'Hands Wash', 20, new Date());
+    const consume1 = new Consume('handsWash', 'example', 60 * 30, yesterday);
+    const consume2 = new Consume('handsWash', 'example', 6, new Date());
     consume1.calcConsume();
     consume2.calcConsume();
-    consume3.calcConsume();
-    consume4.calcConsume();
-    consume5.calcConsume();
+
     state.consumes.addConsume(consume1);
     state.consumes.addConsume(consume2);
-    state.consumes.addConsume(consume3);
-    state.consumes.addConsume(consume4);
-    state.consumes.addConsume(consume5);
 }
 
 /**
