@@ -198,7 +198,10 @@ export const renderChart = (days, data) => {
 export const renderWaterAnimation = percentage => {
     // Update the (percentage) text's position using the Bottom property
     const textPercentage = [...elements.waterAnimationBig.childNodes][1];
-    const bottomPosition = (percentage.toFixed(0) * 45) / 50;
+    if (isNaN(percentage)) {
+        percentage = 0;
+    }
+    let bottomPosition = (percentage.toFixed(0) * 45) / 50;
 
     // Set a limit to fix the hidden text when the bottomposition is too big
     if (percentage >= 78) {
